@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Lumren</title>
+<meta name="description" content="Lumren's privacy policy. How we collect, use, and protect your data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#07050E;--gold:#C9A96E;--gold-dim:rgba(201,169,110,.12);
+  --cream:#EDE8DF;--cream-dim:rgba(237,232,223,.65);--cream-faint:rgba(237,232,223,.35);
+  --muted:#6B6560;--muted2:#9A948C;
+  --surface:#100E1C;--surface2:#161329;
+  --rule:rgba(255,255,255,.05);--rule2:rgba(201,169,110,.13);
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
+nav{position:sticky;top:0;z-index:100;background:rgba(7,5,14,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--rule);padding:18px 52px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-word{font-size:12px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.nav-back{font-size:12px;color:var(--muted2);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+.nav-back:hover{color:var(--cream)}
+@media(max-width:520px){nav{padding:16px 20px}}
+.doc-hero{padding:clamp(60px,10vw,100px) clamp(20px,6vw,52px) clamp(40px,6vw,60px);max-width:820px;margin:0 auto}
+.doc-eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-bottom:20px;display:block}
+.doc-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,7vw,72px);font-weight:300;line-height:1;letter-spacing:-.02em;color:var(--cream);margin-bottom:16px}
+.doc-title em{font-style:italic;color:var(--gold)}
+.doc-meta{font-size:12px;color:var(--muted);letter-spacing:.05em}
+.doc-rule{height:1px;background:var(--rule2);margin:0 auto;max-width:820px}
+.doc-wrap{max-width:820px;margin:0 auto;padding:clamp(40px,6vw,64px) clamp(20px,6vw,52px) clamp(60px,10vw,100px)}
+.doc-summary{background:var(--surface);border:1px solid var(--rule2);border-radius:16px;padding:28px 30px;margin-bottom:48px}
+.doc-summary-title{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.doc-summary-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.doc-summary-list li{font-size:14px;line-height:1.6;color:var(--cream-dim);padding-left:20px;position:relative}
+.doc-summary-list li::before{content:'·';position:absolute;left:0;color:var(--gold)}
+.doc-section{margin-bottom:48px}
+.doc-section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,30px);font-weight:300;color:var(--cream);margin-bottom:18px;line-height:1.2}
+.doc-section-title em{font-style:italic;color:var(--gold)}
+.doc-p{font-size:14.5px;line-height:1.8;color:var(--cream-dim);margin-bottom:14px}
+.doc-p strong{color:var(--cream);font-weight:500}
+.doc-p a{color:var(--gold);text-decoration:none}
+.doc-p a:hover{text-decoration:underline}
+.doc-list{list-style:none;margin:12px 0 14px;display:flex;flex-direction:column;gap:8px}
+.doc-list li{font-size:14px;line-height:1.7;color:var(--cream-dim);padding-left:20px;position:relative}
+.doc-list li::before{content:'·';position:absolute;left:0;color:var(--gold)}
+.doc-divider{height:1px;background:var(--rule);margin:40px 0}
+.doc-callout{background:rgba(201,169,110,.05);border:1px solid var(--rule2);border-radius:12px;padding:20px 22px;margin:20px 0}
+.doc-callout-title{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.doc-callout-body{font-size:14px;line-height:1.7;color:var(--cream-dim)}
+.doc-callout-body strong{color:var(--cream);font-weight:500}
+.doc-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13.5px}
+.doc-table th{text-align:left;padding:10px 14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);border-bottom:1px solid var(--rule2);font-weight:400}
+.doc-table td{padding:12px 14px;color:var(--cream-dim);line-height:1.6;border-bottom:1px solid var(--rule);vertical-align:top}
+.doc-table tr:last-child td{border-bottom:none}
+.doc-table td strong{color:var(--cream);font-weight:500}
+@media(max-width:600px){.doc-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+footer{border-top:1px solid var(--rule);padding:24px 52px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-logo{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.footer-links{display:flex;gap:22px}
+.footer-links a{font-size:12px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--cream)}
+@media(max-width:500px){footer{padding:20px;flex-direction:column;align-items:center;text-align:center;gap:10px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html"><span class="logo-word">Lumren</span></a>
+  <a class="nav-back" href="index.html">← Back to Lumren</a>
+</nav>
+<div class="doc-hero">
+  <span class="doc-eyebrow">Legal</span>
+  <h1 class="doc-title">Privacy <em>Policy</em></h1>
+  <p class="doc-meta">Last updated: March 2026 · Effective immediately</p>
+</div>
+<div class="doc-rule"></div>
+<div class="doc-wrap">
+
+  <div class="doc-summary">
+    <div class="doc-summary-title">Plain English summary</div>
+    <ul class="doc-summary-list">
+      <li>Your data belongs to you. We are custodians, not owners.</li>
+      <li>We never sell your data to anyone, ever, under any circumstances.</li>
+      <li>We never use your personal data to train AI models.</li>
+      <li>Deletion tracking only happens inside Lumren's own journal. We have no access to your keyboard, iMessages, or any other app.</li>
+      <li>Voice tone is read passively with your mic permission, including when the app runs in the background. It is a tone-level number only. No audio file is ever created, stored, or transmitted. Lumren never hears what you are saying. You can revoke mic permission at any time in device Settings.</li>
+      <li>One tap in Settings deletes everything permanently. No recovery possible.</li>
+      <li>Most processing happens on your device. What goes to our servers is encrypted and minimal.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">1. Who we <em>are</em></h2>
+    <p class="doc-p">Lumren is a self-awareness companion built to help people understand their own emotional patterns. We collect and process personal data to provide this service. By using Lumren you agree to the terms of this policy.</p>
+    <p class="doc-p">For privacy-related questions: <a href="/cdn-cgi/l/email-protection#b7c7c5dec1d6d4cef7dbc2dac5d2d999d6c7c7"><span class="__cf_email__" data-cfemail="3242405b4453514b725e475f40575c1c534242">[email&#160;protected]</span></a></p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">2. What we <em>collect</em></h2>
+    <table class="doc-table">
+      <thead><tr><th>Signal</th><th>What it is</th><th>Where it stays</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Voice tone</strong></td><td>With your mic permission, Lumren reads your voice tone passively — including when the app is running in the background. It extracts a single tone-level number representing emotional voice quality. No audio file is created. No words are heard. No recording is stored or transmitted.</td><td>On-device only. A single number value. No audio data of any kind is stored or transmitted.</td></tr>
+        <tr><td><strong>Journal deletions</strong></td><td>What you type and erase inside Lumren's own journal. This is the only text Lumren can see. We have no access to your system keyboard, iMessage, WhatsApp, Notes, or any other app.</td><td>On-device, encrypted as part of your soul memory.</td></tr>
+        <tr><td><strong>Phone usage patterns</strong></td><td>Screen pickups, session frequency, time of day. From your device sensors.</td><td>On-device. A summary is included in encrypted signal snapshots.</td></tr>
+        <tr><td><strong>Movement</strong></td><td>General activity and stillness from your accelerometer. Never precise movement tracking.</td><td>On-device. Summarised into signal snapshots.</td></tr>
+        <tr><td><strong>Journal content</strong></td><td>What you write inside Lumren voluntarily.</td><td>On-device, encrypted. Summaries only are used for companion responses.</td></tr>
+        <tr><td><strong>Location context</strong></td><td>General environment clustering only, not your address or precise GPS coordinates. Used to contextualise signals such as whether you are at home or commuting.</td><td>On-device. We never store or transmit precise location.</td></tr>
+        <tr><td><strong>Health data</strong></td><td>Sleep hours, heart rate, HRV from HealthKit on iOS. Only with your explicit permission.</td><td>On-device. Used to contextualise signals. Never transmitted to our servers.</td></tr>
+        <tr><td><strong>Face expression</strong></td><td>Opt-in only. On-device micro-expression reading via Apple Vision or Google ML Kit. You must actively enable this.</td><td>On-device only. A classification number only. No image data stored or transmitted.</td></tr>
+        <tr><td><strong>Account email</strong></td><td>Used to restore your account if you change devices. Nothing else.</td><td>Stored on our servers, never shared.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="doc-callout">
+      <div class="doc-callout-title">Important: What Lumren cannot see</div>
+      <div class="doc-callout-body">Lumren can see what you type and erase <strong>inside Lumren's journal only</strong>. We have no access to your system keyboard, your iMessages, WhatsApp, Notes, or any other application. We do not use any keyboard extension. We have no camera access at any time. Voice tone is read passively with your mic permission — a tone-level number only, never a recording, never audio stored. You can revoke mic permission at any time in device Settings.</div>
+    </div>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">3. How we <em>use</em> your data</h2>
+    <p class="doc-p">We use your data for one purpose: to provide you with the Lumren experience. Specifically:</p>
+    <ul class="doc-list">
+      <li>To build your signal portrait and soul memory within the app</li>
+      <li>To generate companion messages that are specific to you</li>
+      <li>To detect patterns and behavioral loops in real time</li>
+      <li>To produce your Weekly Soul Letter and breakthrough detections</li>
+      <li>To restore your data if you change devices, via encrypted backup only</li>
+    </ul>
+    <p class="doc-p"><strong>We do not use your data to train AI models.</strong> Your journal entries, voice tone signals, and soul memory are never passed to AI providers in a way that allows training. All prompts are processed in real time and not retained.</p>
+    <p class="doc-p"><strong>We do not build advertising profiles.</strong> We have no advertising business and no advertising partners.</p>
+    <p class="doc-p"><strong>We do not use your data for research</strong> without your explicit, informed, separately obtained consent.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">4. Who we <em>share</em> it with</h2>
+    <p class="doc-p">We do not sell your personal data. We do not share your personal data with third parties for their own purposes. The following limited sharing exists solely to operate the service:</p>
+    <table class="doc-table">
+      <thead><tr><th>Provider</th><th>Purpose</th><th>Data shared</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Supabase</strong></td><td>Encrypted cloud storage and authentication</td><td>Encrypted account data and encrypted signal snapshots only</td></tr>
+        <tr><td><strong>Anthropic (Claude API)</strong></td><td>Companion message generation</td><td>Anonymised, contextual prompts. No raw journal text. Not used for training.</td></tr>
+        <tr><td><strong>ElevenLabs</strong></td><td>Voice synthesis for companion voice (Deep plan only)</td><td>Companion message text only. Never your journal or soul data.</td></tr>
+        <tr><td><strong>Sentry</strong></td><td>Anonymous crash reporting</td><td>Technical error data only. No personal content.</td></tr>
+        <tr><td><strong>Apple / Google</strong></td><td>App distribution and push notifications</td><td>Device tokens for notifications only</td></tr>
+      </tbody>
+    </table>
+    <p class="doc-p">All providers are contractually prohibited from using your data for any purpose other than providing the service described above.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">5. Your <em>rights</em></h2>
+    <p class="doc-p">You have the following rights over your data at all times:</p>
+    <ul class="doc-list">
+      <li><strong>Right to access:</strong> Request a copy of all data we hold about you</li>
+      <li><strong>Right to deletion:</strong> Delete all your data permanently from Settings, then Your Data, then Delete Everything. This is irreversible and takes under 3 seconds. You can also contact us at <a href="/cdn-cgi/l/email-protection#a3d3d1cad5c2c0dae3cfd6ced1c6cd8dc2d3d3"><span class="__cf_email__" data-cfemail="6c1c1e051a0d0f152c0019011e0902420d1c1c">[email&#160;protected]</span></a> and we will process the deletion within 30 days.</li>
+      <li><strong>Right to portability:</strong> Export your soul memory, journal entries, and signal history from Settings, then Your Data, then Export</li>
+      <li><strong>Right to correction:</strong> Update or correct your account information at any time</li>
+      <li><strong>Right to object:</strong> Object to any processing you did not intend to consent to</li>
+    </ul>
+    <p class="doc-p">For users in the European Economic Area, UK, or California, these rights apply under GDPR, UK GDPR, and CCPA respectively. We will respond to all requests within 30 days.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">6. Data <em>security</em></h2>
+    <ul class="doc-list">
+      <li>All data is encrypted at rest using AES-256</li>
+      <li>All data in transit uses TLS 1.3</li>
+      <li>Your soul memory is encrypted on your device before it is ever transmitted</li>
+      <li>We use row-level security on our database so no query can access another user's data</li>
+      <li>HealthKit data is processed on-device only and never transmitted to our servers</li>
+      <li>We conduct regular security reviews</li>
+    </ul>
+    <p class="doc-p">No system is completely secure. If we become aware of a security breach affecting your data, we will notify you within 72 hours.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">7. Data <em>retention</em></h2>
+    <p class="doc-p">We retain your data for as long as your account is active. If you delete your account:</p>
+    <ul class="doc-list">
+      <li>All soul memory, journal entries, and signal history are deleted immediately from your device</li>
+      <li>Server-side data is purged within 30 days</li>
+      <li>Backup copies are destroyed within 90 days</li>
+      <li>Anonymised, non-identifying aggregate statistics may be retained</li>
+    </ul>
+    <p class="doc-p">Signal Twin fingerprints are anonymised behavioral hashes with no personal identifiers and are automatically deleted after 7 days regardless of account status.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">8. Children</h2>
+    <p class="doc-p">Lumren is not intended for users under 17 years of age. We do not knowingly collect data from anyone under 17. If you believe a child has provided us with personal information, please contact us at <a href="/cdn-cgi/l/email-protection#acdcdec5dacdcfd5ecc0d9c1dec9c282cddcdc"><span class="__cf_email__" data-cfemail="0373716a7562607a436f766e71666d2d627373">[email&#160;protected]</span></a> and we will delete it promptly.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">9. Changes to this policy</h2>
+    <p class="doc-p">We will notify you of material changes to this policy via email and an in-app notification at least 14 days before changes take effect. Continued use of the app after that point constitutes acceptance. If you disagree with the changes, you can delete your account before they take effect.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section">
+    <h2 class="doc-section-title">10. Contact</h2>
+    <p class="doc-p">For any privacy-related questions, requests, or concerns:</p>
+    <p class="doc-p">Email: <a href="/cdn-cgi/l/em
