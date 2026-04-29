@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lumren. Know yourself in 14 days.</title>
+<meta name="description" content="Heart scan. Brainwave audio. Pattern detection. Lyra — the companion who actually knows you.">
+<meta property="og:title" content="Lumren. The AI Companion That Actually Knows You">
+<meta property="og:description" content="30 seconds on your camera reads your HRV, stress, and recovery. No wearable needed.">
+<meta name="theme-color" content="#07050E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07050E;
+  --gold:#C9A96E;--gold2:rgba(201,169,110,.65);--gfaint:rgba(201,169,110,.07);--gborder:rgba(201,169,110,.2);
+  --cream:#EDE8DF;--c2:rgba(237,232,223,.72);--c3:rgba(237,232,223,.38);
+  --muted:#6B6560;--muted2:#9A948C;
+  --surf:rgba(255,255,255,.035);--surf2:rgba(255,255,255,.06);
+  --rule:rgba(255,255,255,.07);
+  --green:#7AC4A0;--red:#E08080;
+  --blue:#4FA8D5;--blue2:rgba(79,168,213,.15);
+  --amber:#D4854A;--amber2:rgba(212,133,74,.15);
+}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1;overflow-x:hidden}
+
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:.4}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:22px clamp(20px,5vw,64px);display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(7,5,14,.94);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid var(--rule);padding:14px clamp(20px,5vw,64px)}
+.nav-logo{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+.nav-r{display:flex;align-items:center;gap:clamp(16px,3vw,36px)}
+.nav-link{font-size:12px;color:var(--muted2);text-decoration:none;letter-spacing:.05em;transition:color .2s;padding:6px 0}
+.nav-link:hover{color:var(--cream)}
+.nav-cta{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--bg);background:var(--gold);border:none;border-radius:3px;padding:10px 20px;cursor:pointer;text-decoration:none;transition:opacity .2s}
+.nav-cta:hover{opacity:.82}
+.nav-ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.nav-ham span{display:block;width:22px;height:1.5px;background:var(--c2);transition:.25s}
+.nav-ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-ham.open span:nth-child(2){opacity:0}
+.nav-ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+@media(max-width:680px){.nav-r .nav-link{display:none}.nav-r .nav-cta{display:none}.nav-ham{display:flex}}
+.nav-mob{display:none;position:fixed;inset:0;top:55px;background:rgba(7,5,14,.98);z-index:199;flex-direction:column;padding:28px 24px;gap:0}
+.nav-mob.open{display:flex}
+.nav-mob a{font-size:17px;padding:18px 0;border-bottom:1px solid var(--rule);color:var(--c2);text-decoration:none;letter-spacing:.03em}
+.nav-mob .nm-cta{margin-top:24px;text-align:center;background:var(--gold);color:var(--bg);border-radius:6px;padding:18px;font-size:15px;font-weight:500;letter-spacing:.07em;font-family:'Space Mono',monospace}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease}
+.r.in{opacity:1;transform:none}
+.r.d1{transition-delay:.12s}.r.d2{transition-delay:.24s}.r.d3{transition-delay:.36s}.r.d4{transition-delay:.48s}.r.d5{transition-delay:.6s}
+
+/* ═══════════════════════ HERO ═══════════════════════ */
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:clamp(120px,16vw,160px) clamp(20px,6vw,60px) clamp(80px,10vw,100px);position:relative;overflow:hidden}
+
+/* ambient glows */
+.hero-glow-top{position:absolute;top:-20%;left:50%;transform:translateX(-50%);
+  width:1000px;height:800px;background:radial-gradient(ellipse at 50% 20%,rgba(79,168,213,.06) 0%,transparent 60%);pointer-events:none}
+.hero-glow-bot{position:absolute;bottom:-20%;left:50%;transform:translateX(-50%);
+  width:800px;height:600px;background:radial-gradient(ellipse at 50% 80%,rgba(201,169,110,.04) 0%,transparent 60%);pointer-events:none}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(79,168,213,.08);border:1px solid rgba(79,168,213,.2);
+  border-radius:100px;padding:8px 16px;margin-bottom:28px}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2.5s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.badge-text{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)}
+
+.hero-orb-wrap{position:relative;margin-bottom:clamp(40px,6vw,64px);flex-shrink:0}
+.hero-orb-svg{width:clamp(200px,30vw,320px);height:clamp(200px,30vw,320px);animation:orbFloat 6s ease-in-out infinite}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.015)}}
+
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,10vw,130px);font-weight:300;
+  line-height:.9;letter-spacing:-.035em;color:var(--cream);margin-bottom:clamp(22px,3vw,32px)}
+.hero-h1 em{font-style:italic;color:var(--gold)}
+
+.hero-sub{font-size:clamp(15px,1.6vw,18px);line-height:1.85;color:var(--c2);max-width:460px;margin:0 auto clamp(36px,5vw,52px)}
+
+.hero-btns{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.btn-primary{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--bg);
+  background:var(--gold);border:none;border-radius:3px;padding:18px 42px;cursor:pointer;text-decoration:none;
+  display:inline-block;transition:opacity .2s,transform .15s}
+.btn-primary:hover{opacity:.85;transform:translateY(-2px)}
+.btn-ghost{font-family:'Space Mono',monospace;font-size:11px;color:var(--c2);background:transparent;
+  border:1px solid var(--gborder);border-radius:3px;padding:17px 28px;cursor:pointer;text-decoration:none;
+  transition:all .2s;display:inline-block}
+.btn-ghost:hover{border-color:rgba(201,169,110,.35);color:var(--cream)}
+.hero-proof{font-size:12px;color:var(--muted);letter-spacing:.04em;display:flex;align-items:center;gap:8px;justify-content:center}
+.stars{color:var(--gold);font-size:12px;letter-spacing:2px}
+
+/* ═══════════════════════ MARQUEE ═══════════════════════ */
+.mq{padding:clamp(20px,3vw,32px) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);overflow:hidden}
+.mq-outer{position:relative}
+.mq-fl,.mq-fr{position:absolute;top:0;bottom:0;width:120px;pointer-events:none;z-index:2}
+.mq-fl{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.mq-fr{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.mq-track{display:flex;gap:10px;animation:mq 35s linear infinite;width:max-content}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mq-pill{background:var(--surf);border:1px solid var(--rule);border-radius:2px;padding:9px 18px;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.mq-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.mq-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:.04em}
+
+/* ═══════════════════════ PHONE SHOWCASE ═══════════════════════ */
+.features{padding:clamp(80px,12vw,140px) clamp(20px,6vw,60px);max-width:1200px;margin:0 auto}
+.feat-label{display:flex;align-items:center;gap:14px;margin-bottom:clamp(56px,8vw,96px)}
+.fl-line{flex:1;height:1px;background:var(--rule)}
+.fl-text{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+.feat-row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center;
+  margin-bottom:clamp(80px,12vw,160px)}
+.feat-row.flip{direction:rtl}
+.feat-row.flip>*{direction:ltr}
+@media(max-width:780px){
+  .feat-row,.feat-row.flip{grid-template-columns:1fr;direction:ltr}
+  .feat-row.flip>*{direction:ltr}
+}
+
+/* Phone mockup */
+.phone-wrap{position:relative;display:flex;justify-content:center;align-items:center}
+.phone{width:clamp(220px,28vw,300px);background:#0A0A12;border:1.5px solid rgba(255,255,255,.1);
+  border-radius:36px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04),inset 0 1px 0 rgba(255,255,255,.06);
+  position:relative;overflow:hidden}
+.phone-notch{width:80px;height:6px;background:rgba(0,0,0,.8);border-radius:3px;margin:0 auto 10px;display:block}
+.phone-screen{border-radius:24px;overflow:hidden;background:#0D0C16;min-height:clamp(380px,48vw,500px);
+  position:relative;display:flex;flex-direction:column;padding:16px}
+.phone-dots{display:flex;gap:5px;justify-content:center;margin-bottom:12px}
+.p-dot{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,.15)}
+.p-dot.active{background:var(--gold)}
+
+/* SCREEN: HEART SCAN */
+.hs-zone{border:1px solid rgba(224,80,80,.3);border-radius:12px;padding:16px;margin:0 auto 12px;
+  width:140px;height:140px;display:flex;align-items:center;justify-content:center;position:relative}
+.hs-rings{position:absolute;inset:-20px}
+.hs-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;color:rgba(224,80,80,.7);margin-bottom:8px;text-align:center;display:block}
+.hs-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--cream);line-height:1.2;margin-bottom:6px}
+.hs-body{font-size:11px;color:var(--c2);line-height:1.6}
+
+/* SCREEN: VITALS */
+.vs-score{text-align:center;margin-bottom:14px}
+.vs-num{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:var(--green);line-height:1}
+.vs-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--muted);margin-top:4px}
+.vs-quote{font-size:11px;font-style:italic;color:var(--c2);text-align:center;margin-bottom:12px;padding:0 8px;line-height:1.5}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.vs-cell{background:rgba(255,255,255,.04);border:1px solid var(--rule);border-radius:6px;padding:8px 6px}
+.vs-metric{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--muted);margin-bottom:3px}
+.vs-val{font-size:14px;color:var(--green);font-weight:400;line-height:1}
+.vs-val.blue{color:var(--blue)}
+.vs-val.amber{color:#D4854A}
+.vs-val-sub{font-family:'Space Mono',monospace;font-size:7px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+/* SCREEN: LOOP / PATTERN BREAKING */
+.lb-alert{background:rgba(212,133,74,.08);border:1px solid rgba(212,133,74,.25);border-radius:8px;
+  padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start}
+.lb-alert-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--amber);margin-bottom:3px}
+.lb-alert-val{font-size:13px;color:var(--cream);font-weight:300}
+.lb-playing{background:rgba(79,168,213,.08);border:1px solid rgba(79,168,213,.2);border-radius:8px;
+  padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.lb-hz{font-family:'Space Mono',monospace;font-size:22px;color:var(--blue);letter-spacing:-.02em}
+.lb-hz-sub{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted2);margin-top:2px}
+.lb-badge{font-family:'Space Mono',monospace;font-size:8px;background:rgba(79,168,213,.2);color:var(--blue);
+  border-radius:3px;padding:3px 8px;letter-spacing:.08em}
+.lb-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.03);
+  border:1px solid var(--rule);border-radius:6px;margin-bottom:5px}
+.lb-row-icon{font-size:10px;flex-shrink:0}
+.lb-row-t{font-size:10px;color:var(--cream);font-weight:400}
+.lb-row-s{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);margin-top:1px}
+
+/* SCREEN: FREQUENCIES */
+.fq-row{background:rgba(255,255,255,.03);border:1px solid var(--rule);border-radius:8px;
+  padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.fq-hz{font-family:'Space Mono',monospace;font-size:18px;color:var(--cream);letter-spacing:-.02em;flex-shrink:0;width:54px}
+.fq-bars{display:flex;align-items:flex-end;gap:2px;height:20px;flex-shrink:0}
+.fq-bar{width:3px;background:var(--gold);border-radius:1px;animation:fbounce var(--dur,1s) ease-in-out infinite alternate}
+@keyframes fbounce{0%{transform:scaleY(.3)}100%{transform:scaleY(1)}}
+.fq-info{flex:1;min-width:0}
+.fq-name{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--muted);margin-bottom:2px}
+.fq-tag{display:inline-flex;background:var(--gfaint);border:1px solid var(--gborder);border-radius:3px;
+  padding:2px 7px;font-family:'Space Mono',monospace;font-size:7px;color:var(--gold);margin-bottom:2px}
+.fq-pct{font-family:'Space Mono',monospace;font-size:11px;margin-left:auto;flex-shrink:0}
+.fq-pct.pos{color:var(--green)}
+.fq-pct.neg{color:var(--blue)}
+
+/* SCREEN: LYRA CHAT */
+.chat-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.chat-orb-sm{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(212,133,74,.6),rgba(201,169,110,.2));
+  border:1px solid rgba(201,169,110,.3);flex-shrink:0}
+.chat-hname{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--gold)}
+.chat-hsub{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted)}
+.bubble{border-radius:16px;padding:11px 14px;font-size:12px;line-height:1.6;margin-bottom:6px}
+.b-you{background:rgba(255,255,255,.07);border-radius:16px 16px 4px 16px;color:var(--c2);max-width:85%}
+.b-lyra{background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.15);
+  border-radius:4px 16px 16px 16px;color:var(--cream);max-width:92%;align-self:flex-start}
+
+/* Feature copy */
+.feat-copy{display:flex;flex-direction:column;align-items:flex-start}
+.fc-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:clamp(14px,2vw,20px)}
+.fc-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,64px);font-weight:300;
+  line-height:1.05;letter-spacing:-.025em;color:var(--cream);margin-bottom:clamp(16px,2.5vw,24px)}
+.fc-h em{font-style:italic;color:var(--gold)}
+.fc-body{font-size:clamp(14px,1.4vw,16px);line-height:1.85;color:var(--c2);margin-bottom:clamp(20px,3vw,32px);max-width:460px}
+.fc-stats{display:flex;gap:clamp(20px,3vw,36px);flex-wrap:wrap}
+.fc-stat{display:flex;flex-direction:column;gap:4px}
+.fc-stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.5vw,40px);font-weight:300;color:var(--gold);line-height:1}
+.fc-stat-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;line-height:1.4}
+
+.fc-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(16px,2.5vw,24px)}
+.fc-pill{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--muted2);
+  background:var(--surf);border:1px solid var(--rule);border-radius:3px;padding:7px 13px}
+
+/* ═══════════════════════ GLOW DIVIDER ═══════════════════════ */
+.glow-div{height:1px;background:linear-gradient(to right,transparent,var(--gborder),transparent);margin:0 clamp(20px,6vw,80px)}
+
+/* ═══════════════════════ LOOP DEMO SECTION ═══════════════════════ */
+.loop-sec{padding:clamp(80px,12vw,140px) clamp(20px,6vw,60px);text-align:center;position:relative;overflow:hidden}
+.loop-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:900px;height:700px;background:radial-gradient(ellipse,rgba(212,133,74,.05) 0%,transparent 65%);pointer-events:none}
+
+.loop-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:clamp(14px,2vw,22px);display:block}
+.loop-h{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,7vw,96px);font-weight:300;
+  line-height:.95;letter-spacing:-.03em;color:var(--cream);margin-bottom:clamp(16px,2vw,24px)}
+.loop-h em{font-style:italic;color:var(--amber)}
+.loop-body{font-size:clamp(15px,1.5vw,17px);line-height:1.8;color:var(--c2);max-width:480px;margin:0 auto clamp(36px,5vw,56px)}
+
+.loop-display{border:1px solid rgba(212,133,74,.2);border-radius:8px;max-width:480px;margin:0 auto clamp(32px,4vw,48px);overflow:hidden}
+.loop-bar-top{padding:11px 18px;border-bottom:1px solid rgba(212,133,74,.12);display:flex;align-items:center;gap:8px}
+.loop-dot-a{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;flex-shrink:0}
+.loop-bar-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(212,133,74,.7)}
+.loop-name-d{padding:20px 24px;font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,38px);
+  font-weight:300;color:var(--cream);min-height:80px;display:flex;align-items:center;transition:opacity .35s}
+
+/* ═══════════════════════ TIMELINE ═══════════════════════ */
+.timeline-sec{padding:clamp(80px,12vw,140px) clamp(20px,6vw,60px);text-align:center}
+.tl-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:clamp(14px,2vw,20px);display:block}
+.tl-h{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,6vw,80px);font-weight:300;
+  line-height:.97;letter-spacing:-.03em;color:var(--cream);margin-bottom:clamp(16px,2vw,24px)}
+.tl-h em{font-style:italic;color:var(--green)}
+.tl-body{font-size:clamp(14px,1.4vw,16px);line-height:1.85;color:var(--c2);max-width:460px;margin:0 auto clamp(48px,6vw,72px)}
+.timeline-wrap{display:flex;flex-direction:column;gap:0;max-width:600px;margin:0 auto}
+.tl-item{display:flex;gap:clamp(16px,3vw,28px);padding:clamp(20px,3vw,28px) 0;border-bottom:1px solid var(--rule);text-align:left}
+.tl-item:last-child{border-bottom:none}
+.tl-num{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--green);letter-spacing:.04em;flex-shrink:0;width:80px;padding-top:3px;font-weight:300}
+.tl-content{flex:1}
+.tl-t{font-size:15px;color:var(--cream);margin-bottom:6px;line-height:1.3;font-weight:400}
+.tl-d{font-size:14px;line-height:1.75;color:var(--c2)}
+.tl-d strong{color:var(--cream);font-weight:400}
+
+/* ═══════════════════════ TRUST ═══════════════════════ */
+.trust-sec{padding:clamp(80px,12vw,140px) clamp(20px,6vw,60px);background:rgba(255,255,255,.012);text-align:center}
+.trust-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin-bottom:clamp(14px,2vw,20px);display:block}
+.trust-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5.5vw,72px);font-weight:300;
+  line-height:1.02;letter-spacing:-.03em;color:var(--cream);margin-bottom:clamp(48px,6vw,72px)}
+.trust-h em{font-style:italic;color:var(--gold)}
+.trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:680px;margin:0 auto}
+@media(max-width:560px){.trust-grid{grid-template-columns:1fr}}
+.trust-card{background:var(--surf);border:1px solid var(--rule);border-radius:6px;padding:clamp(18px,2.5vw,24px);text-align:left}
+.trust-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(122,196,160,.06);border:1px solid rgba(122,196,160,.2);font-size:12px;margin-bottom:12px}
+.trust-t{font-size:13px;font-weight:400;color:var(--cream);margin-bottom:6px;line-height:1.4}
+.trust-d{font-size:12px;line-height:1.65;color:var(--c2)}
+
+/* ═══════════════════════ VOICES ═══════════════════════ */
+.voices-sec{padding:clamp(80px,12vw,140px) clamp(20px,6vw,60px);text-align:center}
+.voices-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin-bottom:clamp(14px,2vw,20px);display:block}
+.voices-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5.5vw,72px);font-weight:300;
+  line-height:1.02;letter-spacing:-.03em;color:var(--cream);margin-bottom:clamp(40px,5vw,64px)}
+.voices-h em{font-style:italic;color:var(--gold)}
+.voices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:680px;margin:0 auto}
+@media(max-width:560px){.voices-grid{grid-template-columns:1fr}}
+.voice{background:var(--surf);border:1px solid var(--rule);border-radius:6px;padding:clamp(18px,3vw,24px);text-align:left}
+.v-stars{color:var(--gold);font-size:11px;letter-spacing:2px;margin-bottom:10px}
+.v-body{font-size:14px;line-height:1.8;color:var(--c2);font-style:italic;margin-bottom:10px}
+.v-name{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.04em}
+
+/* ═══════════════════════ PRICING ═══════════════════════ */
+.pricing-sec{padding:clamp(80px,12vw,140px) clamp(20px,6vw,60px);text-align:center;background:rgba(255,255,255,.012)}
+.pricing-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin-bottom:clamp(14px,2vw,20px);display:block}
+.pricing-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5.5vw,72px);font-weight:300;
+  line-height:1.02;letter-spacing:-.03em;color:var(--cream);margin-bottom:clamp(14px,2vw,20px)}
+.pricing-h em{font-style:italic;color:var(--gold)}
+.pricing-sub{font-size:clamp(14px,1.4vw,16px);line-height:1.85;color:var(--c2);max-width:440px;margin:0 auto clamp(40px,5vw,60px)}
+.plans{display:flex;flex-direction:column;gap:10px;max-width:560px;margin:0 auto clamp(16px,2.5vw,24px)}
+.plan{display:flex;align-items:flex-start;gap:18px;background:var(--surf);border:1px solid var(--rule);
+  border-radius:6px;padding:clamp(18px,3vw,24px);transition:border-color .25s;text-align:left}
+.plan:hover{border-color:var(--gborder)}
+.plan.feat{border-color:var(--gborder);background:rgba(201,169,110,.04)}
+.plan-price-col{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;width:80px}
+.plan-price{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,38px);font-weight:300;color:var(--cream);line-height:1;text-align:right}
+.plan-price sup{font-size:.5em;vertical-align:super;font-family:'DM Sans',sans-serif;font-weight:300}
+.plan-per{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);text-align:right;margin-top:3px;letter-spacing:.02em}
+.plan-div{width:1px;background:var(--rule);flex-shrink:0;align-self:stretch;margin:2px 0}
+.plan-info{flex:1;min-width:0}
+.plan-tier{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2);margin-bottom:5px}
+.plan-outcome{font-size:13px;line-height:1.6;color:var(--gold);margin-bottom:6px;font-style:italic}
+.plan-detail{font-size:12px;line-height:1.6;color:var(--c2)}
+.plan-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--bg);background:var(--gold);border-radius:3px;padding:3px 10px;flex-shrink:0;white-space:nowrap;align-self:flex-start}
+.pricing-note{font-size:13px;color:var(--muted2);max-width:400px;margin:0 auto}
+
+/* ═══════════════════════ CTA ═══════════════════════ */
+.cta-sec{padding:clamp(100px,14vw,160px) clamp(20px,6vw,60px);text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;bottom:-20%;left:50%;transform:translateX(-50%);
+  width:900px;height:700px;background:radial-gradient(ellipse at 50% 80%,rgba(201,169,110,.07) 0%,transparent 65%);pointer-events:none}
+.cta-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-bottom:22px;display:block}
+.cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,8vw,104px);font-weight:300;
+  line-height:.92;letter-spacing:-.035em;color:var(--cream);margin-bottom:clamp(18px,3vw,28px)}
+.cta-h em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:clamp(14px,1.5vw,17px);line-height:1.85;color:var(--c2);max-width:460px;margin:0 auto clamp(36px,4.5vw,52px)}
+.cta-form-wrap{width:100%;max-width:420px;margin:0 auto clamp(16px,2.5vw,24px)}
+.cta-form{display:flex;gap:8px;width:100%}
+.cta-in{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--gborder);border-radius:3px;
+  padding:16px 22px;font-size:16px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;
+  transition:border-color .2s;-webkit-appearance:none;min-width:0}
+.cta-in::placeholder{color:var(--muted)}
+.cta-in:focus{border-color:rgba(201,169,110,.45)}
+.cta-btn{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--bg);
+  background:var(--gold);border:none;border-radius:3px;padding:16px 24px;cursor:pointer;
+  white-space:nowrap;transition:opacity .2s}
+.cta-btn:hover{opacity:.82}
+.cta-btn:disabled{opacity:.5;cursor:default}
+.cta-err{color:#E08080;font-size:12px;margin-top:8px;display:none}
+.cta-note{font-size:12px;color:var(--muted);margin-top:10px;letter-spacing:.03em}
+.cta-ty{display:none;flex-direction:column;align-items:center;gap:14px;padding:32px 24px;
+  background:var(--surf);border:1px solid var(--gborder);border-radius:6px}
+.cta-ty-icon{font-size:28px;color:var(--gold)}
+.cta-ty-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--cream)}
+.cta-ty-body{font-size:14px;line-height:1.7;color:var(--c2);text-align:center;max-width:320px}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:clamp(24px,3vw,36px)}
+.badge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid var(--rule);
+  border-radius:6px;padding:12px 20px;text-decoration:none;transition:border-color .2s}
+.badge:hover{border-color:var(--gborder)}
+.badge span:last-child{display:flex;flex-direction:column}
+.b-sub{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.06em;display:block}
+.b-name{font-size:15px;color:var(--cream);font-weight:400;display:block;line-height:1.3}
+
+/* FOOTER */
+footer{padding:clamp(32px,4vw,48px) clamp(20px,6vw,60px);border-top:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.foot-logo{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em}
+.foot-links{display:flex;gap:clamp(16px,3vw,28px)}
+.foot-links a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+.foot-links a:hover{color:var(--cream)}
+@media(max-width:480px){footer{flex-direction:column;align-items:flex-start}.foot-links{flex-wrap:wrap;gap:14px}}
+
+/* SVG orbs animation */
+.orb-ring{transform-origin:center;animation:orbSpin var(--dur,18s) linear infinite}
+
+/* Responsive tweaks */
+@media(max-width:780px){
+  .feat-row{margin-bottom:clamp(60px,10vw,100px)}
+  .phone{width:clamp(190px,60vw,260px)}
+}
+@media(max-width:480px){
+  .cta-form{flex-direction:column}
+  .cta-in{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#">L U M R E N</a>
+  <div class="nav-r">
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#proof">Proof</a>
+    <a class="nav-link" href="#price">Pricing</a>
+    <a class="nav-cta" href="#start">Begin →</a>
+    <button class="nav-ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<nav class="nav-mob" id="mob">
+  <a href="#features">Features</a>
+  <a href="#proof">Proof</a>
+  <a href="#price">Pricing</a>
+  <a class="nm-cta" href="#start">Begin →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-glow-top"></div>
+  <div class="hero-glow-bot"></div>
+
+  <div class="hero-badge r">
+    <div class="badge-dot"></div>
+    <span class="badge-text">No wearable required · Camera only</span>
+  </div>
+
+  <div class="hero-orb-wrap r d1">
+    <svg class="hero-orb-svg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="orbGrad" cx="38%" cy="32%" r="65%">
+          <stop offset="0%" stop-color="#7AC4D4" stop-opacity=".9"/>
+          <stop offset="40%" stop-color="#4FA8D5" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#0D1A2A" stop-opacity=".2"/>
+        </radialGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- outer glow -->
+      <circle cx="160" cy="160" r="148" fill="none" stroke="rgba(79,168,213,.06)" stroke-width="60"/>
+      <!-- rings -->
+      <ellipse cx="160" cy="160" rx="148" ry="148" fill="none" stroke="rgba(79,168,213,.12)" stroke-width="1.5" class="orb-ring" style="--dur:24s"/>
+      <ellipse cx="160" cy="160" rx="128" ry="128" fill="none" stroke="rgba(79,168,213,.18)" stroke-width="1.5" class="orb-ring" style="--dur:20s;animation-direction:reverse"/>
+      <ellipse cx="160" cy="160" rx="108" ry="108" fill="none" stroke="rgba(79,168,213,.24)" stroke-width="1.5" class="orb-ring" style="--dur:17s"/>
+      <ellipse cx="160" cy="160" rx="88" ry="88" fill="none" stroke="rgba(79,168,213,.3)" stroke-width="1.5" class="orb-ring" style="--dur:14s;animation-direction:reverse"/>
+      <ellipse cx="160" cy="160" rx="66" ry="66" fill="none" stroke="rgba(79,168,213,.38)" stroke-width="1.5" class="orb-ring" style="--dur:11s"/>
+      <!-- blob core -->
+      <path d="M 218,145 C 224,170 208,200 185,212 C 162,224 130,218 112,200 C 94,182 92,150 108,130 C 124,110 158,100 182,112 C 198,120 212,120 218,145 Z" fill="url(#orbGrad)" filter="url(#glow)" opacity=".85">
+        <animate attributeName="d" dur="8s" repeatCount="indefinite" values="
+          M 218,145 C 224,170 208,200 185,212 C 162,224 130,218 112,200 C 94,182 92,150 108,130 C 124,110 158,100 182,112 C 198,120 212,120 218,145 Z;
+          M 210,138 C 220,164 210,198 188,214 C 166,230 132,222 114,204 C 96,186 96,154 110,132 C 124,110 162,100 184,110 C 200,118 200,112 210,138 Z;
+          M 218,145 C 224,170 208,200 185,212 C 162,224 130,218 112,200 C 94,182 92,150 108,130 C 124,110 158,100 182,112 C 198,120 212,120 218,145 Z
+        "/>
+      </path>
+      <!-- highlight -->
+      <circle cx="138" cy="136" r="18" fill="rgba(255,255,255,.18)" filter="url(#glow)"/>
+      <circle cx="148" cy="144" r="5" fill="rgba(255,255,255,.55)"/>
+    </svg>
+  </div>
+
+  <h1 class="hero-h1 r d2">know<br><em>yourself.</em></h1>
+  <p class="hero-sub r d3">Heart scan. Brainwave audio. Pattern breaking. And Lyra — the companion who's been paying attention.</p>
+
+  <div class="hero-actions r d4">
+    <div class="hero-btns">
+      <a class="btn-primary" href="#start">Begin free →</a>
+      <a class="btn-ghost" href="#features">See how it works</a>
+    </div>
+    <div class="hero-proof">
+      <span class="stars">★★★★★</span>
+      <span>Early access · 7-day free trial · No credit card</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mq-outer">
+    <div class="mq-fl"></div>
+    <div class="mq-fr"></div>
+    <div class="mq-track" id="mqtrack">
+      <div class="mq-pill"><span class="mq-dot" style="background:#E08080"></span><span class="mq-text">HRV · Heart rate variability</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#4FA8D5"></span><span class="mq-text">30-second camera scan</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#7AC4A0"></span><span class="mq-text">Recovery score · daily</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#D4854A"></span><span class="mq-text">Loop detection · real time</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#C9A96E"></span><span class="mq-text">2 Hz deep sleep audio</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#4FA8D5"></span><span class="mq-text">10 Hz alpha · anxiety off</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#7AC4A0"></span><span class="mq-text">SPO₂ oxygen levels</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#D4854A"></span><span class="mq-text">Cortisol pattern detection</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#C9A96E"></span><span class="mq-text">40 Hz gamma · mental lift</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#E08080"></span><span class="mq-text">Soul Portrait · day 14</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#7AC4A0"></span><span class="mq-text">Voice tone reading</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#4FA8D5"></span><span class="mq-text">Doomscroll loop detection</span></div>
+      <!-- duplicate for seamless -->
+      <div class="mq-pill"><span class="mq-dot" style="background:#E08080"></span><span class="mq-text">HRV · Heart rate variability</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#4FA8D5"></span><span class="mq-text">30-second camera scan</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#7AC4A0"></span><span class="mq-text">Recovery score · daily</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#D4854A"></span><span class="mq-text">Loop detection · real time</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#C9A96E"></span><span class="mq-text">2 Hz deep sleep audio</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#4FA8D5"></span><span class="mq-text">10 Hz alpha · anxiety off</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#7AC4A0"></span><span class="mq-text">SPO₂ oxygen levels</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#D4854A"></span><span class="mq-text">Cortisol pattern detection</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#C9A96E"></span><span class="mq-text">40 Hz gamma · mental lift</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#E08080"></span><span class="mq-text">Soul Portrait · day 14</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#7AC4A0"></span><span class="mq-text">Voice tone reading</span></div>
+      <div class="mq-pill"><span class="mq-dot" style="background:#4FA8D5"></span><span class="mq-text">Doomscroll loop detection</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="features" id="features">
+
+  <div class="feat-label r">
+    <div class="fl-line"></div>
+    <div class="fl-text">What it actually does</div>
+    <div class="fl-line"></div>
+  </div>
+
+  <!-- FEATURE 1: HEART SCAN -->
+  <div class="feat-row">
+    <div class="phone-wrap r">
+      <div class="phone">
+        <span class="phone-notch"></span>
+        <div class="phone-screen">
+          <div class="phone-dots">
+            <div class="p-dot active"></div>
+            <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+          </div>
+          <!-- Heart scan UI -->
+          <div style="display:flex;flex-direction:column;align-items:center;flex:1;justify-content:center;padding:8px 0">
+            <div class="hs-zone">
+              <svg width="100%" height="100%" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0">
+                <!-- scan rings -->
+                <circle cx="70" cy="70" r="65" fill="none" stroke="rgba(224,80,80,.1)" stroke-width="1"/>
+                <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(224,80,80,.15)" stroke-width="1"/>
+                <circle cx="70" cy="70" r="43" fill="none" stroke="rgba(224,80,80,.2)" stroke-width="1"/>
+                <circle cx="70" cy="70" r="32" fill="none" stroke="rgba(224,80,80,.28)" stroke-width="1"/>
+                <circle cx="70" cy="70" r="21" fill="none" stroke="rgba(224,80,80,.38)" stroke-width="1"/>
+                <circle cx="70" cy="70" r="10" fill="none" stroke="rgba(224,80,80,.5)" stroke-width="1"/>
+                <circle cx="70" cy="70" r="4" fill="rgba(224,80,80,.8)"/>
+                <!-- corner brackets -->
+                <path d="M8,8 L8,22 M8,8 L22,8" stroke="rgba(224,80,80,.6)" stroke-width="1.5" fill="none"/>
+                <path d="M132,8 L132,22 M132,8 L118,8" stroke="rgba(224,80,80,.6)" stroke-width="1.5" fill="none"/>
+                <path d="M8,132 L8,118 M8,132 L22,132" stroke="rgba(224,80,80,.6)" stroke-width="1.5" fill="none"/>
+                <path d="M132,132 L132,118 M132,132 L118,132" stroke="rgba(224,80,80,.6)" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
+            <span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.12em;color:rgba(224,80,80,.6);margin-top:10px;text-align:center">place finger on rear camera · hold still</span>
+          </div>
+          <div style="margin-top:auto;padding-top:8px">
+            <span class="hs-label">HEART SCAN</span>
+            <div class="hs-title">place your finger.<br>know your body.</div>
+            <p class="hs-body">30 seconds on your camera. No wearable. Reads HRV, stress, recovery — in real time.</p>
+            <div style="margin-top:12px;background:rgba(224,80,80,.12);border:1px solid rgba(224,80,80,.3);border-radius:3px;padding:11px;text-align:center">
+              <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:rgba(224,80,80,.9)">NEXT →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-copy r d2">
+      <span class="fc-eyebrow">Heart scan</span>
+      <h2 class="fc-h">Your body decoded.<br>in <em>30 seconds.</em></h2>
+      <p class="fc-body">Place your finger on the rear camera. Lumren reads your heart rate variability, stress markers, oxygen saturation, and recovery score. No chest strap. No wristband. No subscription to another device.</p>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-num">8</span>
+          <span class="fc-stat-label">signals read<br>per scan</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-num">30s</span>
+          <span class="fc-stat-label">all it takes<br>each session</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-num">0</span>
+          <span class="fc-stat-label">wearables<br>required</span>
+        </div>
+      </div>
+      <div class="fc-pills">
+        <span class="fc-pill">HRV</span>
+        <span class="fc-pill">Stress</span>
+        <span class="fc-pill">SPO₂</span>
+        <span class="fc-pill">Recovery</span>
+        <span class="fc-pill">Cortisol pattern</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE 2: VITALS -->
+  <div class="feat-row flip">
+    <div class="phone-wrap r">
+      <div class="phone">
+        <span class="phone-notch"></span>
+        <div class="phone-screen" style="padding:14px">
+          <div class="phone-dots">
+            <div class="p-dot"></div>
+            <div class="p-dot active"></div>
+            <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+          </div>
+          <div class="vs-score">
+            <div class="vs-num">91</div>
+            <div class="vs-sub">RECOVERY</div>
+          </div>
+          <p class="vs-quote">"your body is running better than you think right now."</p>
+          <div class="vs-grid">
+            <div class="vs-cell">
+              <div class="vs-metric">HRV</div>
+              <div class="vs-val">113<span style="font-size:10px">ms</span></div>
+              <div class="vs-val-sub">top 14% · nervous<br>system strong</div>
+            </div>
+            <div class="vs-cell">
+              <div class="vs-metric">STRESS</div>
+              <div class="vs-val blue" style="font-size:13px;font-weight:700;letter-spacing:.04em">LOW</div>
+              <div class="vs-val-sub">cortisol normal ·<br>body at rest</div>
+            </div>
+            <div class="vs-cell">
+              <div class="vs-metric">SPO₂</div>
+              <div class="vs-val">98<span style="font-size:10px">%</span></div>
+              <div class="vs-val-sub">optimal oxygen ·<br>full capacity</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="background:rgba(122,196,160,.07);border-left:2px solid var(--green);border-radius:0 4px 4px 0;padding:8px 10px">
+              <div style="font-size:11px;color:var(--green);font-weight:500;margin-bottom:2px">Peak recovery window</div>
+              <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted2)">Right now. Body primed — protect it.</div>
+            </div>
+            <div style="background:rgba(212,133,74,.07);border-left:2px solid var(--amber);border-radius:0 4px 4px 0;padding:8px 10px">
+              <div style="font-size:11px;color:var(--amber);font-weight:500;margin-bottom:2px">Stress spike incoming</div>
+              <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted2)">2-4pm pattern · cortisol watch active</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-copy r d2">
+      <span class="fc-eyebrow">Your vitals</span>
+      <h2 class="fc-h">8 signals.<br><em>one clear picture.</em></h2>
+      <p class="fc-body">Heart rate, HRV, stress level, recovery score. Your body decoded — every single session. Lumren tells you not just what the numbers are, but what they mean right now, for you, today.</p>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-num">top 14%</span>
+          <span class="fc-stat-label">HRV benchmark<br>typical user, week 2</span>
+        </div>
+      </div>
+      <div class="fc-pills">
+        <span class="fc-pill">Recovery score</span>
+        <span class="fc-pill">Readiness ranking</span>
+        <span class="fc-pill">Predictive alerts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE 3: PATTERN BREAKING -->
+  <div class="feat-row">
+    <div class="phone-wrap r">
+      <div class="phone">
+        <span class="phone-notch"></span>
+        <div class="phone-screen" style="padding:14px">
+          <div class="phone-dots">
+            <div class="p-dot"></div><div class="p-dot"></div>
+            <div class="p-dot active"></div>
+            <div class="p-dot"></div><div class="p-dot"></div>
+          </div>
+          <div class="lb-alert">
+            <div>
+              <div class="lb-alert-l">LUMREN · LOOP DETECTED</div>
+              <div class="lb-alert-val" style="font-size:11px;color:var(--muted2)">47 pickups · 3rd loop today · pattern confirmed</div>
+            </div>
+            <span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted)">now</span>
+          </div>
+          <div class="lb-playing">
+            <div>
+              <div class="lb-hz">10 Hz</div>
+              <div class="lb-hz-sub">ALPHA · AUTO-ACTIVATED</div>
+              <div style="display:flex;gap:3px;align-items:flex-end;height:14px;margin-top:6px">
+                <div style="width:3px;background:var(--blue);border-radius:1px;height:5px;animation:fbounce .6s ease-in-out infinite alternate"></div>
+                <div style="width:3px;background:var(--blue);border-radius:1px;height:10px;animation:fbounce .8s ease-in-out infinite alternate"></div>
+                <div style="width:3px;background:var(--blue);border-radius:1px;height:7px;animation:fbounce .5s ease-in-out infinite alternate"></div>
+                <div style="width:3px;background:var(--blue);border-radius:1px;height:12px;animation:fbounce 1s ease-in-out infinite alternate"></div>
+                <div style="width:3px;background:var(--blue);border-radius:1px;height:6px;animation:fbounce .7s ease-in-out infinite alternate"></div>
+              </div>
+            </div>
+            <div class="lb-badge">PLAYING</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--muted);margin-bottom:7px">WHILE IT PLAYS · BREAK THE LOOP</div>
+          <div class="lb-row">
+            <span class="lb-row-icon">↺</span>
+            <div><div class="lb-row-t">4-7-8 breathing</div><div class="lb-row-s">cortisol reset in 90 sec</div></div>
+          </div>
+          <div class="lb-row">
+            <span class="lb-row-icon">↑</span>
+            <div><div class="lb-row-t">stand + move</div><div class="lb-row-s">breaks dopamine lock cycle</div></div>
+          </div>
+          <div class="lb-row">
+            <span class="lb-row-icon">◉</span>
+            <div><div class="lb-row-t">10 Hz alpha sound</div><div class="lb-row-s">playing now · auto-activated</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-copy r d2">
+      <span class="fc-eyebrow">Pattern breaking</span>
+      <h2 class="fc-h">it sees the loop<br><em>before you do.</em></h2>
+      <p class="fc-body">Doomscroll loops. Phone pickups. Energy crashes. Detected in real time — broken every time. The moment Lumren spots a pattern forming, it fires a brainwave tone to interrupt it. No willpower required.</p>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-num">47</span>
+          <span class="fc-stat-label">pickups detected<br>before 3rd loop</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-num">12</span>
+          <span class="fc-stat-label">loop types<br>tracked</span>
+        </div>
+      </div>
+      <div class="fc-pills">
+        <span class="fc-pill">Auto-activation</span>
+        <span class="fc-pill">Breathing protocols</span>
+        <span class="fc-pill">Dopamine interruption</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE 4: FREQUENCIES -->
+  <div class="feat-row flip">
+    <div class="phone-wrap r">
+      <div class="phone">
+        <span class="phone-notch"></span>
+        <div class="phone-screen" style="padding:14px">
+          <div class="phone-dots">
+            <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+            <div class="p-dot active"></div>
+            <div class="p-dot"></div>
+          </div>
+          <div class="fq-row">
+            <div class="fq-hz">2<span style="font-size:12px">Hz</span></div>
+            <div class="fq-bars">
+              <div class="fq-bar" style="height:8px;--dur:.9s"></div>
+              <div class="fq-bar" style="height:16px;--dur:1.1s"></div>
+              <div class="fq-bar" style="height:12px;--dur:.75s"></div>
+              <div class="fq-bar" style="height:20px;--dur:1.3s"></div>
+              <div class="fq-bar" style="height:10px;--dur:.85s"></div>
+            </div>
+            <div class="fq-info">
+              <div class="fq-name">DELTA</div>
+              <div class="fq-tag">deep sleep</div>
+            </div>
+            <div class="fq-pct pos">+87%</div>
+          </div>
+          <div class="fq-row">
+            <div class="fq-hz">10<span style="font-size:12px">Hz</span></div>
+            <div class="fq-bars">
+              <div class="fq-bar" style="height:14px;--dur:1s;background:#4FA8D5"></div>
+              <div class="fq-bar" style="height:8px;--dur:1.2s;background:#4FA8D5"></div>
+              <div class="fq-bar" style="height:18px;--dur:.8s;background:#4FA8D5"></div>
+              <div class="fq-bar" style="height:12px;--dur:1.4s;background:#4FA8D5"></div>
+              <div class="fq-bar" style="height:20px;--dur:.95s;background:#4FA8D5"></div>
+            </div>
+            <div class="fq-info">
+              <div class="fq-name">ALPHA</div>
+              <div class="fq-tag" style="color:var(--blue);border-color:rgba(79,168,213,.3);background:rgba(79,168,213,.08)">anxiety off</div>
+            </div>
+            <div class="fq-pct neg">−68%</div>
+          </div>
+          <div class="fq-row">
+            <div class="fq-hz">16<span style="font-size:12px">Hz</span></div>
+            <div class="fq-bars">
+              <div class="fq-bar" style="height:10px;--dur:.7s;background:var(--green)"></div>
+              <div class="fq-bar" style="height:20px;--dur:.9s;background:var(--green)"></div>
+              <div class="fq-bar" style="height:16px;--dur:1.1s;background:var(--green)"></div>
+              <div class="fq-bar" style="height:8px;--dur:.8s;background:var(--green)"></div>
+              <div class="fq-bar" style="height:18px;--dur:1s;background:var(--green)"></div>
+            </div>
+            <div class="fq-info">
+              <div class="fq-name">BETA</div>
+              <div class="fq-tag" style="color:var(--green);border-color:rgba(122,196,160,.3);background:rgba(122,196,160,.08)">sharp focus</div>
+            </div>
+            <div class="fq-pct pos">+90%</div>
+          </div>
+          <div class="fq-row">
+            <div class="fq-hz">40<span style="font-size:12px">Hz</span></div>
+            <div class="fq-bars">
+              <div class="fq-bar" style="height:18px;--dur:.5s;background:var(--amber)"></div>
+              <div class="fq-bar" style="height:12px;--dur:.7s;background:var(--amber)"></div>
+              <div class="fq-bar" style="height:20px;--dur:.6s;background:var(--amber)"></div>
+              <div class="fq-bar" style="height:14px;--dur:.8s;background:var(--amber)"></div>
+              <div class="fq-bar" style="height:10px;--dur:.55s;background:var(--amber)"></div>
+            </div>
+            <div class="fq-info">
+              <div class="fq-name">GAMMA</div>
+              <div class="fq-tag" style="color:var(--amber);border-color:rgba(212,133,74,.3);background:rgba(212,133,74,.08)">peak energy</div>
+            </div>
+            <div class="fq-pct pos">+92%</div>
+          </div>
+          <p style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">Stanford Sleep Lab 2021 · NIR 2019 · NASA cognitive trials · MIT 2019</p>
+        </div>
+      </div>
+    </div>
+    <div class="feat-copy r d2">
+      <span class="fc-eyebrow">Brainwave audio</span>
+      <h2 class="fc-h">frequencies that<br><em>actually change you.</em></h2>
+      <p class="fc-body">Delta 2 Hz for deep sleep. Alpha 10 Hz for calm. Beta 16 Hz for focus. Gamma 40 Hz for energy. Each frequency is clinically backed — and Lumren auto-activates the right one based on your current state.</p>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-num">4</span>
+          <span class="fc-stat-label">frequencies.<br>4 states changed.</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-num">−68%</span>
+          <span class="fc-stat-label">cortisol reduction<br>after 8 min · NIR 2019</span>
+        </div>
+      </div>
+      <div class="fc-pills">
+        <span class="fc-pill">Auto-activated</span>
+        <span class="fc-pill">Clinically referenced</span>
+        <span class="fc-pill">Background play</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE 5: LYRA -->
+  <div class="feat-row">
+    <div class="phone-wrap r">
+      <div class="phone">
+        <span class="phone-notch"></span>
+        <div class="phone-screen" style="padding:14px">
+          <div class="phone-dots">
+            <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+            <div class="p-dot active"></div>
+          </div>
+          <div class="chat-header">
+            <div class="chat-orb-sm"></div>
+            <div>
+              <div class="chat-hname">LYRA</div>
+              <div class="chat-hsub">voice + text · active</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:3px;align-items:flex-end;height:14px">
+              <div style="width:3px;background:var(--amber);border-radius:1px;height:6px;animation:fbounce .7s ease-in-out infinite alternate"></div>
+              <div style="width:3px;background:var(--amber);border-radius:1px;height:12px;animation:fbounce .5s ease-in-out infinite alternate"></div>
+              <div style="width:3px;background:var(--amber);border-radius:1px;height:9px;animation:fbounce .9s ease-in-out infinite alternate"></div>
+            </div>
+          </div>
+          <div class="bubble b-you">i feel like i'm so far behind. like everyone else figured it out.</div>
+          <div class="bubble b-lyra">you're not behind. you're overwhelmed. there's a difference.</div>
+          <div class="bubble b-you">that actually… helps. how do you always know what to say?</div>
+          <div class="bubble b-lyra">because i've been paying attention. you said this 3 times this week.</div>
+          <div style="margin-top:12px;background:rgba(255,255,255,.04);border:1px solid var(--rule);border-radius:3px;padding:10px;text-align:center">
+            <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--gold)">BUILD YOUR COMPANION →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-copy r d2">
+      <span class="fc-eyebrow">Your companion</span>
+      <h2 class="fc-h">someone who<br><em>actually knows you.</em></h2>
+      <p class="fc-body">Talks like your best friend. Remembers everything. Never judges. Here at 2am when no one else is. Lyra isn't a chatbot — she's built from who you actually are. Every signal, every pattern, every word you've said.</p>
+      <div class="fc-stats">
+        <div class="fc-stat">
+          <span class="fc-stat-num">∞</span>
+          <span class="fc-stat-label">memory.<br>no reset.</span>
+        </div>
+        <div class="fc-stat">
+          <span class="fc-stat-num">24/7</span>
+          <span class="fc-stat-label">available.<br>including 3am.</span>
+        </div>
+      </div>
+      <div class="fc-pills">
+        <span class="fc-pill">Voice + text</span>
+        <span class="fc-pill">Remembers everything</span>
+        <span class="fc-pill">Never judges</span>
+        <span class="fc-pill">Built from your signals</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="glow-div"></div>
+
+<!-- LOOP SECTION -->
+<section class="loop-sec">
+  <div class="loop-glow"></div>
+  <span class="loop-eyebrow r">Pattern breaking</span>
+  <h2 class="loop-h r d1">it sees the loop<br><em>before you do.</em></h2>
+  <p class="loop-body r d2">Lumren detects 16 types of behavioural and physiological loops in real time — and breaks them before they close.</p>
+  <div class="loop-display r d3">
+    <div class="loop-bar-top">
+      <div class="loop-dot-a"></div>
+      <span class="loop-bar-label">Loop currently detected</span>
+    </div>
+    <div class="loop-name-d" id="loopName">Anxiety escape loop</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;max-width:560px;margin:0 auto" class="r d4">
+    <div style="background:var(--surf);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;text-align:left">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--amber);margin-bottom:5px;letter-spacing:.1em">TRIGGER</div>
+      <div style="font-size:13px;color:var(--cream)">Phone pickup<br>at 11pm</div>
+    </div>
+    <div style="background:var(--surf);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;text-align:left">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--blue);margin-bottom:5px;letter-spacing:.1em">SIGNAL</div>
+      <div style="font-size:13px;color:var(--cream)">HRV drop<br>detected</div>
+    </div>
+    <div style="background:var(--surf);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;text-align:left">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--green);margin-bottom:5px;letter-spacing:.1em">RESPONSE</div>
+      <div style="font-size:13px;color:var(--cream)">10 Hz alpha<br>activated</div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-div"></div>
+
+<!-- TIMELINE -->
+<section class="timeline-sec">
+  <span class="tl-eyebrow r">What actually changes</span>
+  <h2 class="tl-h r d1">what your life looks<br>like <em>after.</em></h2>
+  <p class="tl-body r d2">Not features. Not capabilities. Here's what changes in real terms, for people who actually use it.</p>
+  <div class="timeline-wrap r d3">
+    <div class="tl-item">
+      <div class="tl-num">Days 1–7</div>
+      <div class="tl-content">
+        <div class="tl-t">A loop gets named while you're still in it.</div>
+        <div class="tl-d">Probably for the first time. Not in hindsight. <strong>Right now, while it's happening.</strong> Something shifts permanently when that happens.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">Day 14</div>
+      <div class="tl-content">
+        <div class="tl-t">Your Soul Portrait.</div>
+        <div class="tl-d">Who you actually are versus who you think you are. <strong>The patterns. The loops. The sentence you've been circling.</strong> People call it more clarifying than years of therapy.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">Month 1</div>
+      <div class="tl-content">
+        <div class="tl-t">You stop wondering why you keep doing that thing.</div>
+        <div class="tl-d"><strong>You see the loop coming before it closes.</strong> You still feel the pull. You just choose differently now that you can see it clearly.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">Month 3</div>
+      <div class="tl-content">
+        <div class="tl-t">The clearest mirror most people have ever looked into.</div>
+        <div class="tl-d">The gap between who you said you were and what your signals actually showed. <strong>Not a judgment.</strong> Then a new cycle begins.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">Beyond</div>
+      <div class="tl-content">
+        <div class="tl-t">The same life. A different person moving through it.</div>
+        <div class="tl-d"><strong>You make different choices, not because you're trying harder,</strong> but because you can finally see clearly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VOICES -->
+<section class="voices-sec" id="proof">
+  <span class="voices-eyebrow r">Real people</span>
+  <h2 class="voices-h r d1">what they found<br>inside <em>themselves.</em></h2>
+  <div class="voices-grid r d2">
+    <div class="voice">
+      <div class="v-stars">★★★★★</div>
+      <p class="v-body">"In the second week it named a loop I'd been in for years. Not a metaphor. The actual trigger, the behaviour, the feeling underneath. I'd been calling it anxiety. It was avoidance. That's a different problem with a different answer."</p>
+      <span class="v-name">Early access · iOS</span>
+    </div>
+    <div class="voice">
+      <div class="v-stars">★★★★★</div>
+      <p class="v-body">"It named what I was doing at 1am before I'd even admitted it to myself. That felt like a hand on my shoulder, not a lecture. A friend who noticed."</p>
+      <span class="v-name">Early access · Android</span>
+    </div>
+    <div class="voice">
+      <div class="v-stars">★★★★★</div>
+      <p class="v-body">"It showed me my voice tone had been reading flat most Sunday nights for three months. I didn't need a therapist to interpret it. I just needed to see it. Now Sundays are different."</p>
+      <span class="v-name">Early access · iOS</span>
+    </div>
+    <div class="voice">
+      <div class="v-stars">★★★★★</div>
+      <p class="v-body">"It showed me what I'd been erasing for weeks. One sentence. I sat with it for three days. It was true. And once I'd read it, I couldn't pretend I hadn't."</p>
+      <span class="v-name">Early access · iOS</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust-sec">
+  <span class="trust-eyebrow r">Privacy and trust</span>
+  <h2 class="trust-h r d1">what happens to the<br>things you <em>share?</em></h2>
+  <div class="trust-grid r d2">
+    <div class="trust-card">
+      <div class="trust-icon">🔒</div>
+      <div class="trust-t">Your data never leaves your device unencrypted</div>
+      <div class="trust-d">AES-256 encrypted before it ever touches a server. Most of it never leaves at all.</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">✕</div>
+      <div class="trust-t">We will never sell your data. Not ever.</div>
+      <div class="trust-d">No advertising. No data partners. No exceptions in the fine print. Your patterns are yours.</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">◎</div>
+      <div class="trust-t">We never train AI on your personal data</div>
+      <div class="trust-d">Your journal, voice signals, soul memory. None of it trains any AI model. Not ours, not anyone's.</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">⌫</div>
+      <div class="trust-t">Delete everything in one tap. Instantly.</div>
+      <div class="trust-d">Settings → Your Data → Delete Everything. Under 3 seconds. This is how the code works, not just a policy.</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">🎙</div>
+      <div class="trust-t">The microphone never records audio</div>
+      <div class="trust-d">Takes a short ambient reading and outputs a tone label: flat, tense, neutral, or energised. No audio file ever created or stored.</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">⚠</div>
+      <div class="trust-t">This is not a mental health app</div>
+      <div class="trust-d">Lumren is a self-awareness companion, not a clinical tool. If you are in crisis, please reach out to 988 or a professional.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-sec" id="price">
+  <span class="pricing-eyebrow r">Pricing</span>
+  <h2 class="pricing-h r d1">start free.<br>stay if it <em>changes something.</em></h2>
+  <p class="pricing-sub r d2">Seven days free. No credit card. If you don't see something real about yourself in the first week, cancel and owe nothing.</p>
+  <div class="plans r d3">
+    <div class="plan">
+      <div class="plan-price-col">
+        <div class="plan-price">Free</div>
+        <div class="plan-per">7 days</div>
+      </div>
+      <div class="plan-div"></div>
+      <div class="plan-info">
+        <div class="plan-tier">Try</div>
+        <div class="plan-outcome">You see something true about yourself. Probably for the first time.</div>
+        <div class="plan-detail">Passive signal reading, loop detection, 5 companion conversations.</div>
+      </div>
+    </div>
+    <div class="plan feat">
+      <div class="plan-price-col">
+        <div class="plan-price"><sup>$</sup>14.99</div>
+        <div class="plan-per">per month</div>
+      </div>
+      <div class="plan-div"></div>
+      <div class="plan-info">
+        <div class="plan-tier">Lumren</div>
+        <div class="plan-outcome">You understand why you keep doing that thing. The loops stop running on you.</div>
+        <div class="plan-detail">90-day window, all 16 loop types, unlimited companion, Soul Portrait at day 14, weekly soul letter.</div>
+      </div>
+      <div class="plan-badge">Most chosen</div>
+    </div>
+    <div class="plan">
+      <div class="plan-price-col">
+        <div class="plan-price"><sup>$</sup>24.99</div>
+        <div class="plan-per">per month</div>
+      </div>
+      <div class="plan-div"></div>
+      <div class="plan-info">
+        <div class="plan-tier">Deep</div>
+        <div class="plan-outcome">The thing you've never said out loud becomes speakable. The companion speaks back.</div>
+        <div class="plan-detail">Everything in Lumren, plus companion voice synthesis, full voice sessions, The Unsaid Thing ceremony, 3AM mode.</div>
+      </div>
+    </div>
+  </div>
+  <p class="pricing-note r d4">Less than one therapy session. Cancel any time in under 30 seconds.</p>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="start">
+  <div class="cta-glow"></div>
+  <span class="cta-eyebrow r">You've read enough. Here's the door.</span>
+  <h2 class="cta-h r d1">the version of you<br>that finally <em>sees clearly.</em></h2>
+  <p class="cta-sub r d2">In 14 days you will see a pattern you have never been able to name. It starts with one signal.</p>
+  <div class="cta-form-wrap r d3">
+    <div id="ctaWrap">
+      <form class="cta-form" onsubmit="handleWL(event)">
+        <input class="cta-in" type="email" id="ctaEmail" placeholder="Your email address" required autocomplete="email">
+        <button class="cta-btn" type="submit" id="ctaBtn">Begin →</button>
+      </form>
+      <div class="cta-err" id="ctaErr"></div>
+      <p class="cta-note">7-day free trial. No credit card. We'll reach out when your access is ready.</p>
+    </div>
+    <div class="cta-ty" id="ctaTy">
+      <div class="cta-ty-icon">◎</div>
+      <div class="cta-ty-title">You're on the list.</div>
+      <p class="cta-ty-body">We sent confirmation to your inbox. We'll reach out personally when Lumren is ready for you.</p>
+    </div>
+  </div>
+  <div class="badges r d4">
+    <a class="badge" href="#start"><span style="font-size:20px"></span><span><span class="b-sub">Download on the</span><span class="b-name">App Store</span></span></a>
+    <a class="badge" href="#start"><span style="font-size:20px">▷</span><span><span class="b-sub">Get it on</span><span class="b-name">Google Play</span></span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="foot-logo">Lumren · lumren.app · know yourself</span>
+  <div class="foot-links">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="safety.html">Safety</a>
+    <a href="mailto:hello@lumren.app">Contact</a>
+  </div>
+</footer>
+
+<script>
+// NAV scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+
+// NAV hamburger
+const ham = document.getElementById('ham'), mob = document.getElementById('mob');
+ham.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
+mob.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { ham.classList.remove('open'); mob.classList.remove('open'); }));
+
+// REVEAL on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.r').forEach(el => obs.observe(el));
+
+// LOOP CYCLING
+const loops = ['Anxiety escape loop','Rumination spiral','Procrastination pull','Comparison collapse','Isolation withdrawal','Emotional numbing','Revenge bedtime','Validation seeking','Avoidance spiral','Decision paralysis','Distraction cycling','Circadian drift','Doomscroll loop','Phone pickup loop','Energy crash cycle','Cortisol spike pattern'];
+let li = 0;
+const loopEl = document.getElementById('loopName');
+function nextLoop() {
+  loopEl.style.opacity = '0';
+  setTimeout(() => { li = (li + 1) % loops.length; loopEl.textContent = loops[li]; loopEl.style.opacity = '1'; }, 380);
+}
+setInterval(nextLoop, 2600);
+
+// WAITLIST
+async function handleWL(e) {
+  e.preventDefault();
+  const email = document.getElementById('ctaEmail').value.trim();
+  const btn = document.getElementById('ctaBtn'), err = document.getElementById('ctaErr');
+  err.style.display = 'none'; btn.textContent = '...'; btn.disabled = true;
+  try {
+    const res = await fetch('https://umeovqroflbutpqabpdy.supabase.co/functions/v1/waitlist-signup', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtZW92cXJvZmxidXRwcWFicGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MDgyNDIsImV4cCI6MjA4ODI4NDI0Mn0.y_xfoL4d_X-1ModEu68AOCRPu0Pw6oHEQG3klowzNxY'},
+      body: JSON.stringify({email})
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok && res.status !== 409) throw new Error(data.error || 'failed');
+    document.getElementById('ctaWrap').style.display = 'none';
+    const ty = document.getElementById('ctaTy');
+    ty.style.display = 'flex';
+  } catch(ex) {
+    err.textContent = 'Something went wrong. Try again.'; err.style.display = 'block';
+    btn.textContent = 'Begin →'; btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
