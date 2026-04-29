@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Lumren — Know Yourself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05080f;--bg2:#070c18;--surface:#0a101f;--surface2:#0d1425;
+  --border:rgba(255,255,255,0.06);--text:#e6e2d8;--muted:rgba(230,226,216,0.48);
+  --dim:rgba(230,226,216,0.25);--blue:#28b4ff;--gold:#c9a96e;
+  --green:#3cc480;--orange:#e8952a;--red:#ff3b2a;--purple:#8264ff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(5,8,15,.96),transparent)}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;flex-direction:column}
+.nav-sub{font-size:.58rem;letter-spacing:.14em;color:var(--muted);text-transform:lowercase;margin-top:1px}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-link{font-size:.78rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+.nav-link:hover{color:var(--text)}
+.nav-btn{font-size:.78rem;font-weight:500;letter-spacing:.08em;color:#fff;background:var(--blue);text-decoration:none;padding:9px 22px;border-radius:100px;transition:all .2s;box-shadow:0 0 24px rgba(40,180,255,.3)}
+.nav-btn:hover{box-shadow:0 0 36px rgba(40,180,255,.5);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;overflow:hidden;padding-top:72px}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 65% 50%,rgba(40,140,255,.07) 0%,transparent 65%),radial-gradient(ellipse 50% 70% at 20% 80%,rgba(201,169,110,.04) 0%,transparent 60%)}
+.hero-left{padding:80px 48px 80px 60px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.hero-right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 60px 80px 20px;position:relative}
+
+.hero-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:20px;opacity:0;animation:fadeUp .7s .2s ease forwards}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,4.5vw,5rem);line-height:1.06;letter-spacing:-.015em;color:var(--text);margin-bottom:24px;opacity:0;animation:fadeUp .8s .35s ease forwards}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-body{font-size:1.05rem;line-height:1.7;color:var(--muted);max-width:400px;margin-bottom:40px;opacity:0;animation:fadeUp .8s .5s ease forwards}
+.hero-cta-stack{display:flex;flex-direction:column;align-items:flex-start;gap:12px;opacity:0;animation:fadeUp .8s .65s ease forwards}
+
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1680d0,#0c5aa0);color:#fff;font-size:1rem;font-weight:500;padding:16px 36px;border-radius:100px;text-decoration:none;border:none;cursor:pointer;box-shadow:0 0 36px rgba(40,180,255,.22),0 4px 20px rgba(0,0,0,.4);transition:all .25s;position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);border-radius:100px}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 56px rgba(40,180,255,.38),0 8px 28px rgba(0,0,0,.5)}
+.price-sub{font-size:.8rem;color:var(--muted)}
+.price-sub strong{color:var(--text);font-weight:400}
+
+.orb-wrap{position:relative;width:280px;height:280px;opacity:0;animation:fadeIn 1.2s .4s ease forwards}
+.orb-wrap::before{content:'';position:absolute;inset:-40px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(40,180,255,.1) 0%,transparent 70%);animation:glowPulse 3.5s ease-in-out infinite;pointer-events:none}
+.orb-wrap canvas{display:block;border-radius:50%;background:transparent}
+.orb-tagline{margin-top:24px;text-align:center;opacity:0;animation:fadeUp .8s 1s ease forwards}
+.orb-tagline p{font-family:'DM Serif Display',serif;font-style:italic;font-size:1rem;color:var(--muted);line-height:1.5}
+.orb-tagline span{display:block;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:6px;font-family:'DM Sans',sans-serif;font-style:normal}
+.orb-states{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:16px;opacity:0;animation:fadeUp .8s 1.1s ease forwards}
+.orb-pill{font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border:1px solid var(--border);padding:4px 11px;border-radius:100px;cursor:pointer;transition:all .2s;font-weight:500;background:transparent}
+.orb-pill:hover,.orb-pill.active{color:var(--text);border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
+
+@keyframes glowPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* TRUST */
+.trust{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(14px,4vw,48px);padding:12px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,.012)}
+.trust-item{display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--muted);letter-spacing:.03em}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+/* SECTION */
+.sec{padding:96px 24px;max-width:1100px;margin:0 auto}
+.sec-label{font-size:.66rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.sec-title{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;color:var(--text);max-width:540px}
+.sec-title em{font-style:italic;color:var(--gold)}
+.sec-body{font-size:.94rem;color:var(--muted);line-height:1.75;max-width:440px;margin-top:16px}
+.check-list{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.check-item{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted)}
+.check-item::before{content:'✦';font-size:.65rem;flex-shrink:0}
+
+/* HEART SCAN */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+
+/* Phone mockup wrapper */
+.scan-phone{display:flex;justify-content:center;align-items:center}
+.scan-mockup{width:260px;background:#080d1a;border-radius:36px;border:1.5px solid rgba(255,255,255,.1);box-shadow:0 0 60px rgba(255,50,60,.12),0 30px 80px rgba(0,0,0,.6);overflow:hidden;position:relative}
+.scan-mockup::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:80px;height:3px;background:rgba(255,255,255,.08);border-radius:0 0 4px 4px;z-index:10}
+.scan-top-bar{padding:18px 20px 10px;display:flex;align-items:center;justify-content:space-between}
+.scan-top-label{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:500;opacity:.85}
+.scan-top-dots{display:flex;gap:4px}
+.scan-top-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.12)}
+.scan-top-dot.active{background:var(--red);box-shadow:0 0 6px var(--red)}
+.scan-radar-area{padding:10px 24px 0;position:relative}
+.radar-wrap{width:100%;aspect-ratio:1;position:relative}
+.radar-wrap canvas{width:100%!important;height:100%!important}
+.scan-finger-hint{text-align:center;font-size:.68rem;color:var(--muted);letter-spacing:.04em;padding:10px 20px 0;opacity:.7}
+.scan-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:14px;background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.05)}
+.stat-box{background:#080d1a;padding:14px 8px;text-align:center}
+.stat-lbl{font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stat-val{font-size:1.4rem;font-weight:300;color:var(--green);line-height:1}
+.stat-unit{font-size:.58rem;color:var(--muted)}
+.stat-note{font-size:.54rem;color:var(--dim);margin-top:2px}
+.scan-bottom{padding:16px 20px 24px}
+.scan-bottom-space{height:20px}
+.btn-scan{display:none}
+
+/* HZ */
+.hz-demo{display:flex;flex-direction:column;gap:10px}
+.hz-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:72px 1fr auto;align-items:center;gap:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.hz-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:transparent;transition:background .2s}
+.hz-card:hover{background:var(--surface2)}
+.hz-card.playing{border-color:rgba(255,255,255,.12);background:var(--surface2)}
+.hz-card.playing.delta::before{background:var(--purple)}
+.hz-card.playing.alpha::before{background:var(--blue)}
+.hz-card.playing.beta::before{background:var(--green)}
+.hz-card.playing.gamma::before{background:var(--orange)}
+.hz-left{display:flex;flex-direction:column;gap:2px}
+.hz-freq{font-size:1.55rem;font-weight:300;line-height:1;color:var(--text)}
+.hz-band{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hz-mid{display:flex;flex-direction:column;gap:5px}
+.hz-badge{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:100px;font-weight:500;align-self:flex-start}
+.badge-delta{background:rgba(130,100,255,.15);color:var(--purple);border:1px solid rgba(130,100,255,.25)}
+.badge-alpha{background:rgba(40,180,255,.12);color:var(--blue);border:1px solid rgba(40,180,255,.22)}
+.badge-beta{background:rgba(60,196,128,.12);color:var(--green);border:1px solid rgba(60,196,128,.22)}
+.badge-gamma{background:rgba(232,149,42,.12);color:var(--orange);border:1px solid rgba(232,149,42,.22)}
+.hz-effect{font-size:.75rem;color:var(--muted);line-height:1.4}
+.hz-science{font-size:.63rem;color:var(--dim)}
+.hz-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.hz-stat{font-size:1.1rem;font-weight:400;text-align:right}
+.hz-stat-lbl{font-size:.6rem;color:var(--dim);text-align:right}
+.hz-wave{display:flex;align-items:center;gap:3px;height:18px;margin-top:4px}
+.hz-bar{width:3px;background:currentColor;border-radius:2px;opacity:.45;transition:height .1s}
+.playing .hz-wave .hz-bar{animation:wAnim .6s ease-in-out infinite alternate;opacity:.8}
+.hz-bar:nth-child(1){animation-delay:0s}.hz-bar:nth-child(2){animation-delay:.08s}.hz-bar:nth-child(3){animation-delay:.16s}.hz-bar:nth-child(4){animation-delay:.24s}.hz-bar:nth-child(5){animation-delay:.32s}
+@keyframes wAnim{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+
+/* LOOP / DOOMSCROLL */
+.loop-demo{display:flex;flex-direction:column;gap:10px}
+.loop-alert{background:var(--surface);border:1px solid rgba(232,149,42,.2);border-radius:14px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px}
+.loop-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0;margin-top:5px;animation:lPing 2s ease-in-out infinite}
+@keyframes lPing{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.loop-alert-title{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);font-weight:500;margin-bottom:3px}
+.loop-alert-body{font-size:.82rem;color:var(--muted);line-height:1.45}
+.loop-alert-time{font-size:.65rem;color:var(--dim);flex-shrink:0;margin-top:2px}
+.loop-hz-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.loop-hz-num{font-size:2.2rem;font-weight:300;color:var(--text);line-height:1}
+.loop-hz-label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.loop-hz-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+.loop-hz-badge{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--blue);background:rgba(40,180,255,.1);border:1px solid rgba(40,180,255,.2);padding:4px 10px;border-radius:100px}
+.loop-actions{display:flex;flex-direction:column;gap:8px}
+.loop-action{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px}
+.loop-action-icon{width:30px;height:30px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;background:rgba(255,255,255,.03)}
+.loop-action-name{font-size:.85rem;color:var(--text);font-weight:400;margin-bottom:2px}
+.loop-action-desc{font-size:.72rem;color:var(--dim)}
+/* countdown number on loop box */
+.loop-hz-num.ticking{color:var(--blue)}
+
+/* HZ TAP HINT */
+.hz-tap-hint{display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 18px;background:linear-gradient(135deg,rgba(40,180,255,.06),rgba(201,169,110,.04));border:1px solid rgba(40,180,255,.15);border-radius:12px;font-size:.76rem;color:rgba(230,226,216,.55);letter-spacing:.06em;margin-bottom:6px;transition:opacity .3s}
+.hz-tap-hint svg{opacity:.5;flex-shrink:0}
+
+/* COMPANION SPLIT */
+.companion-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:860px;margin:0 auto}
+.chat-demo,.voice-demo{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.chat-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.02)}
+.chat-header-name{font-size:.83rem;font-weight:500;color:var(--text)}
+.chat-header-sub{font-size:.62rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+.online-dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+.chat-mode-badge{margin-left:auto;font-size:.56rem;letter-spacing:.14em;font-weight:500;color:var(--dim);border:1px solid var(--border);padding:2px 8px;border-radius:100px}
+.voice-badge{color:var(--gold);border-color:rgba(201,169,110,.25)}
+.chat-messages{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:.82rem;line-height:1.5;color:var(--text)}
+.msg-user{align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:14px 14px 14px 4px}
+.msg-lyra{align-self:flex-end;background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.15);border-radius:14px 14px 4px 14px;color:#d4c49a}
+.chat-input-row{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.015)}
+.chat-hint{flex:1;font-size:.76rem;color:var(--dim);padding:8px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:100px}
+.chat-send-icon{width:30px;height:30px;border-radius:50%;background:rgba(40,180,255,.12);border:1px solid rgba(40,180,255,.2);display:flex;align-items:center;justify-content:center;color:var(--blue);flex-shrink:0}
+/* VOICE PANEL */
+.voice-body{padding:20px 18px;display:flex;flex-direction:column;align-items:center;gap:16px;flex:1}
+.voice-orb-area{position:relative;display:flex;align-items:center;justify-content:center}
+.voice-ring{position:absolute;width:140px;height:140px;border-radius:50%;border:1px solid rgba(201,169,110,.15);animation:voiceRing 2.5s ease-in-out infinite}
+@keyframes voiceRing{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.08);opacity:.8}}
+.voice-transcript{width:100%;display:flex;flex-direction:column;gap:8px}
+.voice-line{font-size:.8rem;line-height:1.5;padding:10px 13px;border-radius:12px}
+.user-line{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);border-radius:12px 12px 12px 3px}
+.lyra-line{background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.14);color:#d4c49a;font-style:italic;border-radius:12px 12px 3px 12px}
+.voice-live-row{display:flex;align-items:center;gap:10px;width:100%}
+.cv-bars{display:flex;gap:2.5px;align-items:center;height:20px}
+.cv-bar{width:2.5px;background:var(--gold);border-radius:2px;opacity:.4;animation:cvAnim .8s ease-in-out infinite alternate}
+.cv-bar:nth-child(1){animation-delay:0s}.cv-bar:nth-child(2){animation-delay:.1s}.cv-bar:nth-child(3){animation-delay:.2s}.cv-bar:nth-child(4){animation-delay:.3s}.cv-bar:nth-child(5){animation-delay:.4s}.cv-bar:nth-child(6){animation-delay:.5s}.cv-bar:nth-child(7){animation-delay:.6s}
+@keyframes cvAnim{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+.voice-live-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+
+/* PRICING */
+.pricing-sec{padding:80px 24px 100px;max-width:540px;margin:0 auto;text-align:center}
+.pricing-card{background:var(--surface);border:1px solid rgba(40,180,255,.18);border-radius:24px;padding:48px 40px;position:relative;overflow:hidden;box-shadow:0 0 80px rgba(20,120,255,.07)}
+.pricing-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:55%;height:1px;background:linear-gradient(90deg,transparent,rgba(40,180,255,.45),transparent)}
+.pricing-badge{display:inline-block;font-size:.65rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);background:rgba(40,180,255,.09);border:1px solid rgba(40,180,255,.18);padding:5px 14px;border-radius:100px;margin-bottom:28px}
+.pricing-amount{font-family:'DM Serif Display',serif;font-size:4rem;line-height:1;color:var(--text);margin-bottom:4px}
+.pricing-amount sup{font-size:1.5rem;vertical-align:super;font-family:'DM Sans',sans-serif;font-weight:300}
+.pricing-period{font-size:.88rem;color:var(--muted);margin-bottom:36px}
+.pricing-list{list-style:none;text-align:left;display:flex;flex-direction:column;gap:13px;margin-bottom:40px}
+.pricing-list li{display:flex;align-items:flex-start;gap:11px;font-size:.9rem;color:var(--text);line-height:1.5}
+.pricing-list li::before{content:'✦';color:var(--gold);font-size:.6rem;margin-top:5px;flex-shrink:0}
+.trial-note{margin-top:16px;font-size:.76rem;color:var(--muted);line-height:1.65}
+
+/* FAQ */
+.faq-sec{padding:0 24px 96px;max-width:600px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);padding:20px 0}
+.faq-q{font-size:.92rem;font-weight:400;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none}
+.faq-icon{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);flex-shrink:0;transition:all .22s}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(40,180,255,.1);color:var(--blue);border-color:rgba(40,180,255,.3)}
+.faq-a{font-size:.85rem;color:var(--muted);line-height:1.72;max-height:0;overflow:hidden;transition:max-height .32s ease,padding .22s}
+.faq-item.open .faq-a{max-height:220px;padding-top:12px}
+
+/* FINAL */
+.final{padding:80px 24px 100px;text-align:center;position:relative;overflow:hidden}
+.final-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 70% at 50% 100%,rgba(20,100,255,.07) 0%,transparent 65%)}
+.final h2{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.1;max-width:500px;margin:0 auto 14px}
+.final p{font-size:.92rem;color:var(--muted);margin-bottom:36px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:26px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+footer p{font-size:.72rem;color:var(--dim)}
+footer a{font-size:.72rem;color:var(--dim);text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--muted)}
+.footer-links{display:flex;gap:20px}
+
+.hz-countdown{position:absolute;top:10px;right:12px;font-size:.68rem;font-weight:500;color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.05);border:1px solid var(--border);padding:2px 8px;border-radius:100px;pointer-events:none}
+.hz-progress-track{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(255,255,255,.05);border-radius:0 0 14px 14px;overflow:hidden}
+.hz-progress-bar{height:100%;width:0%;background:currentColor;border-radius:0 0 14px 14px;transition:width 1s linear;opacity:.6}
+.playing .hz-progress-bar{opacity:1}
+
+/* IMPROVED MOBILE */
+@media(max-width:768px){
+  .trust{gap:10px 24px}
+  .trust-item{font-size:.72rem}
+  .hero{display:flex;flex-direction:column;min-height:auto;padding-top:20px}
+  .hero-left{padding:24px 24px 40px;text-align:center;order:2}
+  .hero-cta-stack{align-items:center}
+  .hero-body{margin:0 auto 32px}
+  .hero-right{padding:80px 24px 16px;order:1}
+  .orb-wrap{width:200px;height:200px}
+  .orb-wrap canvas{width:200px!important;height:200px!important}
+  .feat-grid,.hz-grid{grid-template-columns:1fr;gap:36px}
+  .loop-grid{grid-template-columns:1fr;gap:36px}
+  .feat-grid .sec-text{order:-1}
+  .hz-grid .hz-demo{order:-1}
+  .loop-grid .sec-text{order:-1}
+  .companion-split{grid-template-columns:1fr;gap:14px}
+  .hz-card{grid-template-columns:60px 1fr auto;gap:10px;padding:14px 16px}
+  .hz-freq{font-size:1.2rem!important}
+  .sec{padding:60px 20px}
+  nav{padding:14px 20px}
+  .nav-right .nav-link{display:none}
+  .pricing-card{padding:32px 20px}
+  .pricing-amount{font-size:3rem}
+  footer{padding:20px 20px;flex-direction:column;align-items:center;text-align:center;gap:12px}
+  .scan-stats-row{grid-template-columns:repeat(3,1fr)}
+  .stat-val{font-size:1.2rem!important}
+  h1{font-size:clamp(2.4rem,9vw,4rem)}
+  .btn-primary{font-size:.92rem;padding:15px 28px}
+  .scan-mockup{width:220px}
+  .loop-hz-box{grid-template-columns:auto 1fr;gap:10px}
+  .loop-hz-box>div:last-child{display:none}
+  .voice-ring{width:110px;height:110px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    lumren
+    <span class="nav-sub">know yourself</span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-link" href="#features">How it works</a>
+    <a class="nav-link" href="#pricing">Pricing</a>
+    <a class="nav-btn" href="#pricing">Start 3-Day Trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-left">
+    <p class="hero-eyebrow">AI Companion · Always with you</p>
+    <h1>Your heart never lies.<br><em>We just help<br>you listen.</em></h1>
+    <p class="hero-body">Lumren reads your body in real time. Heart rate, HRV, stress. Then wraps it in an AI that actually knows you. Not a tracker. A companion.</p>
+    <div class="hero-cta-stack">
+      <a class="btn-primary" href="#pricing">
+        Start 3-Day Free Trial
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <span class="price-sub">Free for 3 days · then <strong>$19.99/month</strong> · cancel anytime</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="orb-wrap">
+      <canvas id="heroOrb" width="280" height="280"></canvas>
+    </div>
+    <div class="orb-tagline">
+      <p>"Your body is running better<br>than you think right now."</p>
+      <span>Lumren · 9:14 am</span>
+    </div>
+    <div class="orb-states" id="orbPills"></div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="trust-item"><span class="trust-dot"></span>Cancel in one tap</div>
+  <div class="trust-item"><span class="trust-dot"></span>Your data stays encrypted on your device</div>
+  <div class="trust-item"><span class="trust-dot"></span>iOS &amp; Android</div>
+</div>
+
+
+
+<!-- FEATURE 1: HEART SCAN -->
+<section class="sec" id="features">
+  <div class="feat-grid">
+    <div class="scan-phone">
+      <div class="scan-mockup">
+        <div class="scan-top-bar">
+          <span class="scan-top-label">Heart Scan</span>
+          <div class="scan-top-dots">
+            <div class="scan-top-dot active"></div>
+            <div class="scan-top-dot"></div>
+            <div class="scan-top-dot"></div>
+            <div class="scan-top-dot"></div>
+          </div>
+        </div>
+        <div class="scan-radar-area">
+          <div class="radar-wrap">
+            <canvas id="radarCanvas" width="300" height="300"></canvas>
+          </div>
+        </div>
+        <p class="scan-finger-hint">place your finger on rear camera · hold still</p>
+        <div class="scan-stats-row">
+          <div class="stat-box">
+            <div class="stat-lbl">HRV</div>
+            <div class="stat-val" id="hrvVal">113</div>
+            <div class="stat-unit">ms</div>
+            <div class="stat-note">top 14%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-lbl">Stress</div>
+            <div class="stat-val" id="stressVal" style="color:var(--green)">Low</div>
+            <div class="stat-unit">&nbsp;</div>
+            <div class="stat-note">cortisol ok</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-lbl">SpO₂</div>
+            <div class="stat-val" id="spo2Val">98</div>
+            <div class="stat-unit">%</div>
+            <div class="stat-note">full cap.</div>
+          </div>
+        </div>
+        <div class="scan-bottom-space"></div>
+      </div>
+    </div>
+    <div class="sec-text">
+      <p class="sec-label">Biometric Scan</p>
+      <h2 class="sec-title">place your finger.<br><em>know your body.</em></h2>
+      <p class="sec-body">30 seconds on your camera. No wearable needed. Reads HRV, stress, and recovery score in real time. Every session, your body decoded.</p>
+      <div class="check-list">
+        <div class="check-item" style="color:var(--muted)">HRV, heart rate, SpO₂. 8 signals per scan</div>
+        <div class="check-item" style="color:var(--muted)">Recovery score 0 to 100, recalculated daily</div>
+        <div class="check-item" style="color:var(--muted)">No wearable required. Rear camera only</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 2: HZ AUDIO -->
+<section class="sec" style="padding-top:0;">
+  <div class="feat-grid hz-grid">
+    <div class="sec-text">
+      <p class="sec-label">Brainwave Audio</p>
+      <h2 class="sec-title">frequencies that<br><em>actually change you.</em></h2>
+      <p class="sec-body">Delta for deep sleep. Alpha for calm. Beta for sharp focus. Gamma for peak energy. Tap any card to hear it. Headphones give you the full binaural effect.</p>
+    </div>
+    <div class="hz-demo" id="hzDemo">
+      <div class="hz-tap-hint" id="hzTapHint">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.1" opacity=".6"/><path d="M6.5 4v3l2 1.2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+        Tap a frequency to play &nbsp;·&nbsp; headphones recommended
+      </div>
+      <div class="hz-card delta" data-hz="2" data-band="delta" data-color="130,100,255" onclick="playHz(this)">
+        <div class="hz-left"><div class="hz-freq">2 Hz</div><div class="hz-band">Delta</div></div>
+        <div class="hz-mid">
+          <span class="hz-badge badge-delta">deep sleep</span>
+          <div class="hz-effect">Slow-wave sleep +34%</div>
+          <div class="hz-science">Stanford Sleep Lab 2021</div>
+        </div>
+        <div class="hz-right">
+          <div class="hz-stat" style="color:var(--purple)">+87%</div>
+          <div class="hz-stat-lbl">sleep quality</div>
+          <div class="hz-wave" style="color:var(--purple)">
+            <div class="hz-bar" style="height:6px"></div><div class="hz-bar" style="height:12px"></div>
+            <div class="hz-bar" style="height:8px"></div><div class="hz-bar" style="height:14px"></div>
+            <div class="hz-bar" style="height:6px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hz-card alpha" data-hz="10" data-band="alpha" data-color="40,180,255" onclick="playHz(this)">
+        <div class="hz-left"><div class="hz-freq">10 Hz</div><div class="hz-band">Alpha</div></div>
+        <div class="hz-mid">
+          <span class="hz-badge badge-alpha">anxiety off</span>
+          <div class="hz-effect">Cortisol reduced 28% after 8 min</div>
+          <div class="hz-science">NIH 2019</div>
+        </div>
+        <div class="hz-right">
+          <div class="hz-stat" style="color:var(--blue)">-68%</div>
+          <div class="hz-stat-lbl">cortisol</div>
+          <div class="hz-wave" style="color:var(--blue)">
+            <div class="hz-bar" style="height:10px"></div><div class="hz-bar" style="height:16px"></div>
+            <div class="hz-bar" style="height:12px"></div><div class="hz-bar" style="height:18px"></div>
+            <div class="hz-bar" style="height:10px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hz-card beta" data-hz="16" data-band="beta" data-color="60,196,128" onclick="playHz(this)">
+        <div class="hz-left"><div class="hz-freq">16 Hz</div><div class="hz-band">Beta</div></div>
+        <div class="hz-mid">
+          <span class="hz-badge badge-beta">sharp focus</span>
+          <div class="hz-effect">Reaction time +19% in NASA cognitive trials</div>
+          <div class="hz-science">NASA 2018</div>
+        </div>
+        <div class="hz-right">
+          <div class="hz-stat" style="color:var(--green)">+90%</div>
+          <div class="hz-stat-lbl">clarity</div>
+          <div class="hz-wave" style="color:var(--green)">
+            <div class="hz-bar" style="height:8px"></div><div class="hz-bar" style="height:16px"></div>
+            <div class="hz-bar" style="height:20px"></div><div class="hz-bar" style="height:14px"></div>
+            <div class="hz-bar" style="height:10px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hz-card gamma" data-hz="40" data-band="gamma" data-color="232,149,42" onclick="playHz(this)">
+        <div class="hz-left"><div class="hz-freq">40 Hz</div><div class="hz-band">Gamma</div></div>
+        <div class="hz-mid">
+          <span class="hz-badge badge-gamma">peak energy</span>
+          <div class="hz-effect">Amyloid plaque -40% in 4-week study</div>
+          <div class="hz-science">MIT 2019</div>
+        </div>
+        <div class="hz-right">
+          <div class="hz-stat" style="color:var(--orange)">+92%</div>
+          <div class="hz-stat-lbl">mental lift</div>
+          <div class="hz-wave" style="color:var(--orange)">
+            <div class="hz-bar" style="height:14px"></div><div class="hz-bar" style="height:20px"></div>
+            <div class="hz-bar" style="height:16px"></div><div class="hz-bar" style="height:20px"></div>
+            <div class="hz-bar" style="height:12px"></div>
+          </div>
+        </div>
+      </div>
+      <p id="hzHint" style="text-align:center;font-size:.72rem;color:var(--dim);margin-top:2px;display:none"></p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- FEATURE 3: LOOP / DOOMSCROLL DETECTION -->
+<section class="sec" style="padding-top:0;">
+  <div class="feat-grid loop-grid">
+    <div class="loop-demo">
+      <div class="loop-alert">
+        <div class="loop-dot"></div>
+        <div style="flex:1">
+          <div class="loop-alert-title">Lumren &middot; Loop Detected</div>
+          <div class="loop-alert-body">47 pickups &middot; 3rd loop today &middot; pattern confirmed</div>
+        </div>
+        <div class="loop-alert-time">now</div>
+      </div>
+      <div class="loop-hz-box">
+        <div><div class="loop-hz-num" id="loopCountdown">62</div><div class="loop-hz-label">seconds to calm</div></div>
+        <div><div class="loop-hz-desc">10 Hz Alpha auto-activated &middot; breaking the dopamine lock cycle</div></div>
+        <div><span class="loop-hz-badge">Playing</span></div>
+      </div>
+      <p style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:4px 0 2px">While it plays, break the loop</p>
+      <div class="loop-actions">
+        <div class="loop-action">
+          <div class="loop-action-icon" style="font-size:.7rem;letter-spacing:.06em;color:var(--muted)">4·7·8</div>
+          <div><div class="loop-action-name">4-7-8 breathing</div><div class="loop-action-desc">cortisol reset in 90 seconds</div></div>
+        </div>
+        <div class="loop-action">
+          <div class="loop-action-icon" style="font-size:.7rem;letter-spacing:.06em;color:var(--muted)">MOVE</div>
+          <div><div class="loop-action-name">stand + move</div><div class="loop-action-desc">breaks dopamine lock cycle</div></div>
+        </div>
+        <div class="loop-action">
+          <div class="loop-action-icon" style="font-size:.7rem;letter-spacing:.06em;color:var(--blue)">Hz</div>
+          <div><div class="loop-action-name">10 Hz alpha sound</div><div class="loop-action-desc">playing now &middot; auto-activated</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-text">
+      <p class="sec-label">Pattern Breaking</p>
+      <h2 class="sec-title">it sees the loop<br><em>before you do.</em></h2>
+      <p class="sec-body">Doomscroll loops. Phone pickups. Energy crashes. Detected in real time and broken every time. Breathing cues, movement prompts, and auto-activated Hz audio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 4: AI COMPANION -->
+<section class="sec" style="padding-top:0;">
+  <div class="sec-text" style="text-align:center;max-width:600px;margin:0 auto 40px">
+    <p class="sec-label">Your Companion</p>
+    <h2 class="sec-title" style="max-width:none;margin:0 auto">someone who<br><em>actually knows you.</em></h2>
+    <p class="sec-body" style="max-width:480px;margin:16px auto 0">Talks like your best friend. Remembers everything. Never judges. Here at 2am when no one else is.</p>
+  </div>
+  <div class="companion-split">
+    <!-- TEXT CHAT -->
+    <div class="chat-demo">
+      <div class="chat-header">
+        <canvas id="lyraOrb" width="32" height="32" style="border-radius:50%"></canvas>
+        <div>
+          <div class="chat-header-name">Lyra</div>
+          <div class="chat-header-sub"><span class="online-dot"></span>text · always on</div>
+        </div>
+        <div class="chat-mode-badge">TEXT</div>
+      </div>
+      <div class="chat-messages">
+        <div class="msg msg-user">i feel like i'm so far behind. like everyone else figured it out.</div>
+        <div class="msg msg-lyra">you're not behind. you're overwhelmed. there's a difference.</div>
+        <div class="msg msg-user">that actually... helps. how do you always know what to say?</div>
+        <div class="msg msg-lyra">because i've been paying attention. you said this 3 times this week.</div>
+      </div>
+      <div class="chat-input-row">
+        <div class="chat-hint">type anything...</div>
+        <div class="chat-send-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+    <!-- VOICE -->
+    <div class="voice-demo">
+      <div class="chat-header">
+        <canvas id="lyraOrb2" width="32" height="32" style="border-radius:50%"></canvas>
+        <div>
+          <div class="chat-header-name">Lyra</div>
+          <div class="chat-header-sub"><span class="online-dot"></span>voice · always on</div>
+        </div>
+        <div class="chat-mode-badge voice-badge">VOICE</div>
+      </div>
+      <div class="voice-body">
+        <div class="voice-orb-area">
+          <canvas id="voiceOrb" width="120" height="120" style="border-radius:50%"></canvas>
+          <div class="voice-ring"></div>
+        </div>
+        <div class="voice-transcript">
+          <div class="voice-line user-line">"i haven't slept properly in weeks"</div>
+          <div class="voice-line lyra-line">Your HRV confirms it. You're running at 60% recovery. Let's fix that tonight.</div>
+        </div>
+        <div class="voice-live-row">
+          <div class="cv-bars">
+            <div class="cv-bar" style="height:6px"></div><div class="cv-bar" style="height:14px"></div>
+            <div class="cv-bar" style="height:10px"></div><div class="cv-bar" style="height:18px"></div>
+            <div class="cv-bar" style="height:8px"></div><div class="cv-bar" style="height:14px"></div>
+            <div class="cv-bar" style="height:12px"></div>
+          </div>
+          <span class="voice-live-label">listening now</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-sec" id="pricing">
+  <p class="sec-label" style="text-align:center">Pricing</p>
+  <h2 class="sec-title" style="margin:0 auto 48px;text-align:center">One plan.<br>Full access.</h2>
+  <div class="pricing-card">
+    <span class="pricing-badge">3-day free trial included</span>
+    <div class="pricing-amount"><sup>$</sup>19<span style="font-size:2.2rem">.99</span></div>
+    <p class="pricing-period">per month &middot; cancel anytime</p>
+    <ul class="pricing-list">
+      <li>Biometric heart scan. HRV, stress, recovery</li>
+      <li>Unlimited AI companion. Voice and text</li>
+      <li>Doomscroll detection with real-time intervention</li>
+      <li>All four brainwave frequencies (Delta, Alpha, Beta, Gamma)</li>
+      <li>Daily pattern insights and mood history</li>
+      <li>Every new feature, automatically included</li>
+    </ul>
+    <a class="btn-primary" href="#" style="width:100%;justify-content:center;font-size:1rem;padding:18px">
+      Start 3-Day Free Trial
+    </a>
+    <p class="trial-note">Free for 3 days, then $19.99/month. Cancel before day 3 and pay nothing.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-sec">
+  <p class="sec-label" style="text-align:center;margin-bottom:40px">Questions</p>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Do I need a credit card to start?<span class="faq-icon">+</span></div>
+    <div class="faq-a">No. Sign up and you're in. We only ask for payment details on day 3 if you want to continue. Cancel before then and we charge you nothing.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Does the heart scan work without a wearable?<span class="faq-icon">+</span></div>
+    <div class="faq-a">Yes. Your rear camera detects micro-changes in blood flow through your fingertip, the same technique used in clinical pulse oximeters. 30 seconds is enough to read HRV, stress, and recovery score.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What devices does Lumren work on?<span class="faq-icon">+</span></div>
+    <div class="faq-a">iOS and Android. Heart rate sync also works with Apple Watch, Garmin, Fitbit, and Wear OS devices if you want continuous monitoring between scans.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Is my health data private?<span class="faq-icon">+</span></div>
+    <div class="faq-a">Your biometric and emotional data is encrypted on your device before it moves anywhere. We don't sell it, share it, or use it to train models. It's yours.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Can I cancel at any time?<span class="faq-icon">+</span></div>
+    <div class="faq-a">One tap in the app. No confirmation loops, no email chains, no chat required. Instant.</div>
+  </div>
+</section>
+
+
+
+<footer>
+  <p>&copy; 2026 Lumren Inc.</p>
+  <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Support</a></div>
+</footer>
+
+<script>
+// ── ORB RENDERER ──────────────────────────────────
+const SC={idle:[201,169,110],listening:[40,180,255],thinking:[130,100,255],speaking:[220,180,80],calm:[60,195,130],stressed:[255,65,45],sad:[90,90,200],focused:[215,145,50],energized:[255,188,85],still:[40,100,180]};
+const SW={idle:{amp:.052,speed:.38,waves:3,chaos:.08},listening:{amp:.068,speed:.72,waves:3,chaos:.18},thinking:{amp:.060,speed:.55,waves:3,chaos:.20},speaking:{amp:.082,speed:.95,waves:4,chaos:.28},calm:{amp:.050,speed:.36,waves:3,chaos:.05},stressed:{amp:.078,speed:1.10,waves:4,chaos:.32},sad:{amp:.048,speed:.24,waves:3,chaos:.06},focused:{amp:.072,speed:.75,waves:4,chaos:.09},energized:{amp:.095,speed:1.30,waves:5,chaos:.30},still:{amp:.024,speed:.08,waves:2,chaos:.02}};
+const LY=[{rFrac:1.00,phaseOff:0.0,fillOpa:.018,strokeOpa:.30,strokeLW:.70},{rFrac:.88,phaseOff:.5,fillOpa:.042,strokeOpa:.55,strokeLW:1.10},{rFrac:.72,phaseOff:1.0,fillOpa:.068,strokeOpa:.40,strokeLW:.85},{rFrac:.56,phaseOff:1.5,fillOpa:.098,strokeOpa:.28,strokeLW:.70},{rFrac:.40,phaseOff:2.0,fillOpa:.135,strokeOpa:.00,strokeLW:0},{rFrac:.24,phaseOff:2.5,fillOpa:.185,strokeOpa:.00,strokeLW:0}];
+const ST=400;
+const lp=(a,b,t)=>a+(b-a)*t;
+const lRGB=(a,b,t)=>[lp(a[0],b[0],t),lp(a[1],b[1],t),lp(a[2],b[2],t)];
+const lWP=(a,b,t)=>({amp:lp(a.amp,b.amp,t),speed:lp(a.speed,b.speed,t),waves:lp(a.waves,b.waves,t),chaos:lp(a.chaos,b.chaos,t)});
+
+function createOrb(canvas,initState,size){
+  size=size||220; canvas.width=canvas.height=size; canvas.style.borderRadius='50%';
+  const ctx=canvas.getContext('2d',{alpha:true}),R=size/2,CX=R,CY=R;
+  let state=initState||'idle',lt=0,el=0,cRGB=[...SC[state]],cWP={...SW[state]},cHz=10,ae=0;
+  function draw(ts){
+    const dt=Math.min((ts-(lt||ts))/1000,.05);lt=ts;el+=dt;const t=el;
+    cRGB=lRGB(cRGB,SC[state]||SC.idle,.030);const[r,g,b]=cRGB.map(Math.round);
+    cWP=lWP(cWP,SW[state]||SW.idle,.022);const wp=cWP;
+    cHz=lp(cHz,10,.012);const hz=cHz;
+    const hs=hz*.08,pB=Math.sin(t*hs*Math.PI*2),sB=Math.sin(t*hs*Math.PI*2*.37+1.1);
+    ae=lp(ae,Math.abs(pB*(.7+.3*sB))*.4,.06);const a=Math.min(ae,.65);
+    const amp=wp.amp*R+a*R*.18,br=.82+Math.sin(t*(.30+(hz/40)*.60))*.18,pu=1+a*.20;
+    ctx.clearRect(0,0,size,size);ctx.save();ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.clip();
+    const atm=ctx.createRadialGradient(CX,CY,R*.15,CX,CY,R);
+    atm.addColorStop(0,`rgba(${r},${g},${b},${(.22+a*.14)*br})`);atm.addColorStop(.55,`rgba(${r},${g},${b},.04)`);atm.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=atm;ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fill();
+    const sg=ctx.createRadialGradient(CX-R*.12,CY-R*.12,0,CX,CY,R);
+    sg.addColorStop(0,`rgba(${r},${g},${b},.05)`);sg.addColorStop(.45,'rgba(4,7,18,.75)');sg.addColorStop(.88,'rgba(2,4,12,.92)');sg.addColorStop(1,`rgba(${r},${g},${b},.18)`);
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fill();
+    ctx.save();ctx.beginPath();ctx.arc(CX,CY,R*.97,0,Math.PI*2);ctx.clip();
+    for(let li=0;li<LY.length;li++){
+      const L=LY[li],bR=R*L.rFrac*pu,ph=L.phaseOff,sp=wp.speed,wi=Math.round(wp.waves);
+      const build=()=>{
+        const b1=.55+.45*Math.sin(t*sp+ph),b2=.55+.45*Math.sin(t*sp*.71+ph+1.1),b3=.55+.45*Math.sin(t*sp*1.29+ph+2.3);
+        ctx.beginPath();
+        for(let i=0;i<=ST;i++){
+          const angle=(i/ST)*Math.PI*2;
+          const noise=amp*Math.sin(angle*wi+ph)*b1+amp*.4*Math.sin(angle*(wi+2)+ph+1)*b2+amp*wp.chaos*.14*Math.sin(angle*(wi*2+1)+ph+2)*b3+amp*.20*Math.sin(angle*(wi+1)+ph+.5)*b2+(a>.04?amp*a*.22*Math.sin(angle*(wi+3)+ph+1.5)*b1:0);
+          const rad=Math.max(R*.05,bR+noise);
+          i===0?ctx.moveTo(CX+Math.cos(angle)*rad,CY+Math.sin(angle)*rad):ctx.lineTo(CX+Math.cos(angle)*rad,CY+Math.sin(angle)*rad);
+        }ctx.closePath();
+      };
+      build();ctx.fillStyle=`rgba(${r},${g},${b},${L.fillOpa*(1+a*.9)})`;ctx.fill();
+      if(L.strokeOpa>0){build();ctx.strokeStyle=`rgba(${r},${g},${b},${L.strokeOpa*(.85+a*.5)})`;ctx.lineWidth=L.strokeLW;ctx.stroke();}
+    }ctx.restore();
+    const cp=(.76+Math.sin(t*2.9)*.24)*(1+a*.50);
+    [[R*.62*cp,.050+a*.07],[R*.32*cp,.110+a*.12],[R*.15*cp,.220+a*.18],[R*.06*cp,.460+a*.25]].forEach(([rad,opa])=>{
+      const g2=ctx.createRadialGradient(CX,CY,0,CX,CY,rad);
+      g2.addColorStop(0,`rgba(${Math.min(255,r+70)},${Math.min(255,g+70)},${Math.min(255,b+70)},${opa})`);
+      g2.addColorStop(.5,`rgba(${r},${g},${b},${opa*.3})`);g2.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g2;ctx.beginPath();ctx.arc(CX,CY,rad,0,Math.PI*2);ctx.fill();
+    });
+    const dR=R*.044*cp,dG=ctx.createRadialGradient(CX,CY,0,CX,CY,dR);
+    dG.addColorStop(0,'rgba(255,255,255,1)');dG.addColorStop(.5,`rgba(${Math.min(255,r+70)},${Math.min(255,g+70)},${Math.min(255,b+70)},.85)`);dG.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=dG;ctx.beginPath();ctx.arc(CX,CY,dR,0,Math.PI*2);ctx.fill();
+    const spc=ctx.createRadialGradient(CX-R*.30,CY-R*.30,0,CX-R*.18,CY-R*.18,R*.44);
+    spc.addColorStop(0,'rgba(255,255,255,.08)');spc.addColorStop(.7,'rgba(255,255,255,.02)');spc.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=spc;ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fill();
+    const ec=ctx.createRadialGradient(CX,CY,R*.68,CX,CY,R);
+    ec.addColorStop(0,'rgba(0,0,0,0)');ec.addColorStop(1,`rgba(${r},${g},${b},${(.20+a*.14)*br})`);
+    ctx.fillStyle=ec;ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fill();
+    ctx.restore();requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  return{setState:s=>{state=s;}};
+}
+
+// ── RADAR ────────────────────────────────────────
+let _scanning=false;
+function drawRadar(){
+  const c=document.getElementById('radarCanvas');if(!c)return;
+  const ctx=c.getContext('2d'),W=300,H=300,CX=150,CY=150,R=128;
+  let angle=0;
+  (function frame(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,50,60,.14)';ctx.lineWidth=1;
+    [R,R*.74,R*.51,R*.31,R*.15].forEach(r=>{ctx.beginPath();ctx.arc(CX,CY,r,0,Math.PI*2);ctx.stroke();});
+    ctx.beginPath();ctx.moveTo(CX-R,CY);ctx.lineTo(CX+R,CY);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(CX,CY-R);ctx.lineTo(CX,CY+R);ctx.stroke();
+    const bL=20;ctx.strokeStyle='rgba(255,50,60,.42)';ctx.lineWidth=1.5;
+    [[CX-R-3,CY-R-3,1,1],[CX+R+3,CY-R-3,-1,1],[CX-R-3,CY+R+3,1,-1],[CX+R+3,CY+R+3,-1,-1]].forEach(([x,y,sx,sy])=>{
+      ctx.beginPath();ctx.moveTo(x,y+sy*bL);ctx.lineTo(x,y);ctx.lineTo(x+sx*bL,y);ctx.stroke();
+    });
+    if(_scanning){
+      angle=(angle+.04)%(Math.PI*2);
+      ctx.save();ctx.translate(CX,CY);
+      if(ctx.createConicGradient){
+        const cg=ctx.createConicGradient(angle,0,0);
+        cg.addColorStop(0,'rgba(255,50,60,0)');cg.addColorStop(.85,'rgba(255,50,60,0)');cg.addColorStop(1,'rgba(255,50,60,.22)');
+        ctx.fillStyle=cg;ctx.beginPath();ctx.arc(0,0,R,0,Math.PI*2);ctx.fill();
+      }else{
+        ctx.strokeStyle='rgba(255,50,60,.45)';ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(angle)*R,Math.sin(angle)*R);ctx.stroke();
+      }
+      ctx.restore();
+      const opa=.5+.5*Math.sin(Date.now()*.005);
+      ctx.beginPath();ctx.arc(CX,CY,7,0,Math.PI*2);ctx.fillStyle=`rgba(255,80,80,${opa})`;ctx.fill();
+      ctx.fillStyle='rgba(255,80,80,.65)';ctx.font='13px DM Sans,monospace';ctx.textAlign='center';
+      ctx.fillText(Math.floor(68+Math.sin(Date.now()*.003)*8)+' bpm',CX,CY+R*.58);
+    }else{
+      ctx.beginPath();ctx.arc(CX,CY,4,0,Math.PI*2);ctx.fillStyle='rgba(255,50,60,.28)';ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  })();
+}
+let _scanTimer=null;
+function startScan(){
+  const btn=document.getElementById('scanBtn');
+  if(_scanning){
+    _scanning=false;btn.textContent='Start Scan \u2192';btn.classList.remove('scanning');
+    clearTimeout(_scanTimer);return;
+  }
+  btn.textContent='Scanning\u2026 tap to stop';btn.classList.add('scanning');_scanning=true;
+  _scanTimer=setTimeout(()=>{
+    ['hrvVal','stressVal','spo2Val'].forEach(id=>{
+      const el=document.getElementById(id);if(!el)return;
+      if(id==='hrvVal')el.textContent=[98,106,113,122,134][Math.floor(Math.random()*5)];
+      else if(id==='stressVal'){const v=['Low','Moderate','Low'][Math.floor(Math.random()*3)];el.textContent=v;el.style.color=v==='Low'?'var(--green)':'var(--orange)';}
+      else el.textContent=[96,97,98,99][Math.floor(Math.random()*4)];
+    });
+    _scanning=false;btn.textContent='Scan Again \u2192';btn.classList.remove('scanning');
+  },4000);
+}
+
+// ── HZ AUDIO + COUNTDOWN ────────────────────────
+let _actx=null,_nodes=[],_cdInterval=null,_cdTotal=30;
+
+function stopHz(){
+  _nodes.forEach(n=>{try{n.stop();}catch(e){}});_nodes=[];
+  if(_cdInterval){clearInterval(_cdInterval);_cdInterval=null;}
+  document.querySelectorAll('.hz-card').forEach(c=>{
+    c.classList.remove('playing');
+    const cd=c.querySelector('.hz-countdown');if(cd)cd.remove();
+    const pb=c.querySelector('.hz-progress-bar');if(pb)pb.style.width='0%';
+  });
+  const hint=document.getElementById('hzTapHint');if(hint)hint.style.display='flex';
+}
+
+function startCountdown(card,seconds){
+  if(_cdInterval)clearInterval(_cdInterval);
+  let remaining=seconds;
+  // inject countdown display if not present
+  let cd=card.querySelector('.hz-countdown');
+  if(!cd){
+    cd=document.createElement('div');
+    cd.className='hz-countdown';
+    card.appendChild(cd);
+  }
+  let pb=card.querySelector('.hz-progress-bar');
+  if(!pb){
+    const track=document.createElement('div');
+    track.className='hz-progress-track';
+    pb=document.createElement('div');
+    pb.className='hz-progress-bar';
+    track.appendChild(pb);
+    card.appendChild(track);
+  }
+  const update=()=>{
+    cd.textContent=remaining+'s';
+    pb.style.width=((seconds-remaining)/seconds*100)+'%';
+    if(remaining<=0){stopHz();return;}
+    remaining--;
+  };
+  update();
+  _cdInterval=setInterval(()=>{
+    if(!card.classList.contains('playing')){clearInterval(_cdInterval);_cdInterval=null;return;}
+    update();
+  },1000);
+}
+
+function playHz(card){
+  if(!_actx)_actx=new(window.AudioContext||window.webkitAudioContext)();
+  if(_actx.state==='suspended')_actx.resume();
+  const was=card.classList.contains('playing');stopHz();if(was)return;
+  const hz=parseFloat(card.dataset.hz),band=card.dataset.band;
+  const gain=_actx.createGain();gain.gain.setValueAtTime(0,_actx.currentTime);gain.gain.linearRampToValueAtTime(.12,_actx.currentTime+.8);gain.connect(_actx.destination);
+  const merger=_actx.createChannelMerger(2);merger.connect(gain);
+  const L=_actx.createOscillator(),R=_actx.createOscillator();
+  const lG=_actx.createGain(),rG=_actx.createGain();lG.gain.value=rG.gain.value=1;
+  L.frequency.value=200;R.frequency.value=200+hz;L.type=R.type='sine';
+  L.connect(lG);lG.connect(merger,0,0);R.connect(rG);rG.connect(merger,0,1);
+  L.start();R.start();_nodes=[L,R];
+  card.classList.add('playing');
+  const hint=document.getElementById('hzTapHint');if(hint)hint.style.display='none';
+  const sm={delta:'still',alpha:'calm',beta:'focused',gamma:'energized'};
+  if(window._heroOrb)window._heroOrb.setState(sm[band]||'calm');
+  document.getElementById('hzHint').textContent=`${card.querySelector('.hz-freq').textContent} ${band} playing \u00b7 use headphones for full binaural effect`;
+  startCountdown(card,_cdTotal);
+}
+
+// ── FAQ ──────────────────────────────────────────
+function toggleFaq(el){
+  const item=el.closest('.faq-item'),wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+// ── INIT ─────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hc=document.getElementById('heroOrb');
+  window._heroOrb=createOrb(hc,'listening',280);
+  const hS=['listening','calm','thinking','focused','energized','idle'];let hI=0;
+  setInterval(()=>{hI=(hI+1)%hS.length;window._heroOrb.setState(hS[hI]);},3400);
+
+  const pills=document.getElementById('orbPills');
+  ['calm','listening','focused','energized','stressed','thinking','still'].forEach((s,i)=>{
+    const p=document.createElement('button');p.className='orb-pill';p.textContent=s;
+    if(i===0)p.classList.add('active');
+    p.onclick=()=>{document.querySelectorAll('.orb-pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');window._heroOrb.setState(s);};
+    pills.appendChild(p);
+  });
+
+  const lc=document.getElementById('lyraOrb');if(lc)createOrb(lc,'speaking',32);
+  const lc2=document.getElementById('lyraOrb2');if(lc2)createOrb(lc2,'listening',32);
+  const vc=document.getElementById('voiceOrb');if(vc)createOrb(vc,'calm',120);
+  drawRadar();
+
+  // Loop countdown demo animation
+  const lcd=document.getElementById('loopCountdown');
+  if(lcd){
+    let lv=62;
+    setInterval(()=>{
+      lv--;if(lv<0)lv=62;
+      lcd.textContent=lv;
+      lcd.classList.toggle('ticking',lv<30);
+    },1000);
+  }
+});
+</script>
+</body>
+</html>
